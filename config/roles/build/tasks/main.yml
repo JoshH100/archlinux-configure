@@ -1,5 +1,5 @@
 - name: Build AUR package
-  shell: /usr/local/bin {{ package }}
+  shell: /usr/local/bin/buildaur {{ package }}
   environment:
    AURDEST: /data/aursync
    CCACHE_DIR: /data/ccache 
