@@ -2,6 +2,6 @@
 - name: Build AUR package
   hosts: all
   become: yes
-  become: aurutils
+  become_user: aurutils
   roles:
     - build 
