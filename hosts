@@ -1,9 +1,9 @@
-[bb136]
-bb136-[01:24]
-
 [ch215l]
 ch215li
 ch215l-[01:16]
+
+[bb136]
+bb136-[01:24]
 
 [ch275l]
 ch275l-[01:08]
@@ -22,23 +22,13 @@ ck182-[18:34]
 bb136
 ch215l
 ch275l
-grla
 ck182
+grla
 
 [servers]
 plabnagios
 plabpuppet
-
-[bbw220]
-bbw220-[01:30]
-
-[ctb56]
-ctb56i
-ctb56-[01:30]
-
-[bb316a]
-bb316ai
-bb316a-[01:36]
+plabmon
 
 [server]
 labbuild-test1
