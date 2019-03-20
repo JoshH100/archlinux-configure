@@ -1,4 +1,5 @@
 ---
 - name: Build AUR package
+  hosts: all
   roles:
     - build 
