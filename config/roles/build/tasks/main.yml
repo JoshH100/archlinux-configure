@@ -3,7 +3,3 @@
   environment:
    AURDEST: /data/aursync
    CCACHE_DIR: /data/ccache 
-#- name: Check aurutils lock file
-  #  stat: path: 
-  #- name: Build AUR Package
-  # systemd: name=aur-sync@{{ package }} state=start
