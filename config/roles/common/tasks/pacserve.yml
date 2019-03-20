@@ -1,0 +1,39 @@
+- name: Update pacman cache
+  pacman:
+    update_cache: yes
+
+- name: Install pacserve
+  package:
+    name: pacserve
+    state: latest
+
+- name: check pacserve installed
+  shell: pacman -Q pacserve
+  register: pacserve
+  tags: pacmantemp
+
+- name: print pacserve
+  debug: msg="{{pacserve}}"
+
+- name: Add pacserve to pacman.conf
+  template:
+    src: pacman.conf.j2
+    dest: /etc/pacman.conf
+  tags: pacmantemp
+
+- name: open ports for pacserve tcp
+  ufw:
+    rule: allow
+    port: '15678:15679'
+    proto: tcp 
+
+- name: open ports for pacserve udp 
+  ufw:
+    rule: allow
+    port: '15678:15679'
+    proto: udp
+
+- name: Start and enable pacserve 
+  command: systemctl enable --now pacserve
+  check_mode: no
+  when: not ansible_check_mode

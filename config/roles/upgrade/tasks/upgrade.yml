@@ -1,0 +1,39 @@
+- name: copy upgrade scripts and services
+  copy:
+    src: "{{ item.name }}"
+    dest: "/"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { name: "etc", mode: "0644" }
+    - { name: "usr", mode: "0755" }
+
+- name: enable schedule-reboot and download-updates timer
+  service:
+    name: '{{ item }}' 
+    state: started
+    enabled: true
+  with_items:
+    - 'schedule-reboot.timer'
+    - 'schedule-reboot.path'
+    - 'download-updates.timer'  
+
+- name: Remove problematic and obsolete packages
+  pacman:
+    name: '{{ remove_packages }}'
+    state: absent
+  ignore_errors: true
+
+- name: install_packages list present
+  pacman:
+    name: "{{ install_packages }}"
+    update_cache: yes
+    state: present
+  become: yes
+#  with_items: "{{ install_packages }}"
+
+
+#- name: Download package updates and schedule update
+# shell: yes | pacman -Sy && yes | pacman -Suw && schedule-system-update 
+
+#- name: Notify users of impending upgrade/reboot
+#shell: /usr/local/bin/notify-users "Pending Upgrade" "Please save work and logoff" "critical"

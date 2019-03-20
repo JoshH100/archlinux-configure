@@ -1,0 +1,21 @@
+- name: Post install config 
+  hosts: all
+  strategy: debug
+  check_mode: true
+  gather_facts: True
+  vars:
+    contact_email: jhoffer@mines.edu
+    mines_repo_host: greyfox.mines.edu:15678
+    sudoers:
+      - ccitlabadmins
+    module_list:
+      - nfs
+      - cachefiles  
+  pre_tasks:
+    - pacman: update_cache=true
+      register: pacman_updated
+
+  roles:
+    - {role: common, tags: ['common']}
+    - {role: virt, tags: ['virt']}
+    - {role: upgrade, tags: ['upgrade']}

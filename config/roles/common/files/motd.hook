@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Remove
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = linux
+
+[Action]
+Description = Update motd after every kernel update 
+When = PostTransaction
+Exec = /usr/local/bin/generate_motd > /etc/motd

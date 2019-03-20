@@ -1,0 +1,40 @@
+[options]
+HoldPkg     = pacman glibc
+CleanMethod = KeepCurrent 
+Architecture = auto
+CacheDir = /var/cache/pacman/pkg
+CacheDir = {{ build.repo.dest}}
+
+UseSyslog
+Color
+TotalDownload
+CheckSpace
+SigLevel    = Required DatabaseOptional
+LocalFileSigLevel = Optional
+
+[core]
+Include = /etc/pacman.d/lug.conf
+Include = /etc/pacman.d/mirrorlist
+
+[extra]
+Include = /etc/pacman.d/lug.conf
+Include = /etc/pacman.d/mirrorlist
+
+[community]
+Include = /etc/pacman.d/lug.conf
+Include = /etc/pacman.d/mirrorlist
+
+[multilib]
+Include = /etc/pacman.d/lug.conf
+Include = /etc/pacman.d/mirrorlist
+
+[mines]
+SigLevel = Optional TrustAll
+Server = http://greyfox.mines.edu:15678/pacman/$repo/$arch
+
+
+[{{ build.repo.name }}]
+SigLevel = Required DatabaseOptional
+Server = file://{{ build.repo.dest }}
+
+

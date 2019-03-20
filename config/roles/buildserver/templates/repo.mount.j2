@@ -1,0 +1,14 @@
+[Unit]
+Description=Mount local repository
+After=network-online.target
+Wants=network-online.target
+
+[Mount]
+What={{ build.repo.src }}
+Where={{ build.repo.dest }}
+Options=credentials={{ cifs.creds.dest }},iocharset=utf8,rw,x-systemd.automount,noauto,fsc,vers={{ cifs.vers }},forceuid,forcegid,uid={{build.user.uid}},gid={{build.user.gid}},mfsymlinks,nobrl
+Type=cifs
+TimeoutSec=15
+
+[Install]
+WantedBy=multi-user.target

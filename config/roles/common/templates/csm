@@ -1,0 +1,3 @@
+{% for group in sudoers %}
+%{{ group }} ALL=(ALL:ALL) ALL
+{% endfor %}

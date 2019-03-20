@@ -1,0 +1,26 @@
+---
+- name: Create fscache folder 
+  file:
+    path: /var/cache/fscache
+    state: directory
+    owner: root
+  when: (isgui|bool)
+    
+- name: Install cachefilesd package
+  pacman:
+    name: cachefilesd
+    state: present
+    update_cache: yes
+  when: (isgui|bool)
+
+- name: Load cachefiles module
+  command: modprobe cachefiles
+  when: (isgui|bool)
+
+- name: Enable and start cachefiles service
+  service:
+    name: cachefilesd.service
+    state: started
+    enabled: yes
+  when: (isgui|bool)
+

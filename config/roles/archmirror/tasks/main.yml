@@ -1,0 +1,28 @@
+- name: install pip for apache ansible package
+  pacman: name=python-pip state=present
+
+- name: setup smb credentials 
+  template: src=samba_creds.j2 dest={{ cifs.creds.dest }} mode="u+rwx,g-rwx,o-rwx"
+
+- name: create mount for mirror(s)
+  include_role:
+    name: ypsman.systemd_mounts
+  vars:
+    mounts:
+      mirror:
+            share: "{{ build.mirror.src }}"
+            mount: "{{ build.mirror.dest }}"
+            type: cifs
+            options: "credentials={{ cifs.creds.dest }},iocharset=utf8,rw,x-systemd.automount,noauto,fsc,vers={{ cifs.vers }},forceuid,forcegid,uid={{build.user.uid}},gid={{build.user.gid}},mfsymlinks,nobrl"
+            automount: true 
+
+- name: create basic vhost for mirror
+  include_role:
+    name: robertdebock.httpd
+  vars:
+    httpd_vhosts:
+      - name: archlinux_mirror
+        servername: "{{ inventory_hostname }}"
+        documentroot: "{{ build.mirror.dest }}/{{ build.mirror.arch_name }}"
+
+

@@ -1,0 +1,28 @@
+- name: setup mirror 
+  hosts: server
+  strategy: free
+  gather_facts: True
+  become: yes
+  vars:
+    rabbitmq:
+      user:
+        name: 'sensu'
+        password: 'sensu' 
+      port: 5670
+    zsh:
+      theme: clint
+      term: linux
+    contact_email: jhoffer@mines.edu
+    mines_repo_host: greyfox.mines.edu:15678
+    type: server
+    sudoers:
+      - ccitlabadmins
+    module_list:
+      - nfs
+      - cachefiles  
+        #  pre_tasks:
+        #    - pacman: update_cache=true
+        #      register: pacman_updated
+
+  roles:
+    - {role: archmirror, tags: ['archmirror']}

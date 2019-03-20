@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "info-windows-servicetag": {
+      "type": "metric",
+      "command": "Powershell.exe -NonInteractive -NoProfile -ExecutionPolicy Bypass -NoLogo -File C:\\opt\\sensu\\plugins\\info-windows-servicetag.ps1",
+      "subscribers": [ "windows" ],
+      "interval": 6000
+    }
+  }
+}
+

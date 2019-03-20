@@ -1,0 +1,78 @@
+- name: install packages for ldap/kerboros
+  pacman:
+    name: openldap,nss-pam-ldapd,sssd, pam-krb5, pacserve
+    state: latest
+
+- name: configure MinesCerts for ldap
+  copy:
+    src: MinesCerts
+    dest: /etc/MinesCerts
+    owner: root
+    group: root
+    mode:  0644
+
+- name: configrure sssd
+  template:
+    src: sssd.conf.j2
+    dest: /etc/sssd/sssd.conf
+    mode: 0600
+  notify: enable services
+
+- name: resolv.conf
+  file:
+    src: /run/systemd/resolve/stub-resolv.conf
+    dest: /etc/resolv.conf
+    state: link
+    force: yes
+
+- name: copy lab specific config files
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  with_items:
+    - {src: 'lightdm', dest: '/etc/pam.d/lightdm'}
+    - {src: 'lightdm.conf', dest: '/etc/lightdm/lightdm.conf'}
+    - {src: 'client.conf', dest: '/etc/cups/client.conf'}
+  when: type == "lab"
+
+- name: configure pam, nsswitch, sshd
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  with_items:
+    - {src: 'nsswitch.conf', dest: '/etc/nsswitch.conf'}
+    - {src: 'system-auth', dest: '/etc/pam.d/system-auth'}
+    - {src: 'ldap.conf', dest: '/etc/openldap/ldap.conf'}
+    - {src: 'nscd.conf', dest: '/etc/nscd.conf'}
+    - {src: 'passwd', dest: '/etc/pam.d/passwd'}
+    - {src: 'krb5.conf', dest: '/etc/krb5.conf'}  
+    - {src: 'nobeep.conf', dest: '/etc/modprobe.d/nobeep.conf'}  
+    - {src: 'waitnetwork.conf', dest: '/etc/systemd/system/sssd.service.d/'}
+
+
+- name: configure krb5 and keytab
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: root
+    group: root
+    mode: 0600
+  ignore_errors: yes
+  with_items:
+    - {src: "keytabs/krb5.keytab.{{ansible_hostname}}", dest: '/etc/krb5.keytab' }
+
+- name: set timezone
+  timezone:
+    name: America/Denver
+
+    #- name: install ntp
+    #  pacman:
+    #    name: ntp
+    #    state: latest
+    #  notify: enable services
+- name: enable systemd timesysted
+  service:
+    name: systemd-timesyncd.service
+    state: started
+    enabled: true
+

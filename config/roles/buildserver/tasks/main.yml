@@ -1,0 +1,107 @@
+- name: Install packages
+  pacman: 
+    name: "{{ software }}"
+    state: present
+    update_cache: yes
+
+- name: create build user
+  user:
+    name: "{{ build.user.name }}"
+    uid: "{{ build.user.uid }}"
+    shell: /bin/zsh
+
+- name: create necessary directories
+  file: path="{{ item.path }}" state=directory owner="{{ item.owner }}" mode=0755
+  loop:
+    - { path: "{{ build.repo.dest }}"                 , owner: "{{ build.user.name }}" }
+    - { path: "{{ build.makepkg.builddir }}"          , owner: "{{ build.user.name }}" }
+    - { path: "{{ build.aur.dest }}"                  , owner: "{{ build.user.name }}" }
+    - { path: "{{ build.makepkg.ccache.src }}"        , owner: "{{ build.user.name }}" }
+
+- name: Create systemd mounts and mount repo and aursync locations
+  block:
+    - file: path=/etc/samba/creds state=directory mode="u+rwx,g-rwx,o-rwx"
+    - template: src=samba_creds.j2 dest={{ cifs.creds.dest }} mode="u+rwx,g-rwx,o-rwx"
+    - template: src=aursync.mount.j2 dest=/etc/systemd/system/{{ build.aur.dest[1:] | replace("/", "-") }}.mount
+    - systemd: name={{ build.aur.dest[1:] | replace("/", "-") }}.mount state=started enabled=yes
+    - template: src=repo.mount.j2 dest=/etc/systemd/system/{{ build.repo.dest[1:] | replace("/", "-") }}.mount
+    - systemd: name={{ build.repo.dest[1:] | replace("/", "-") }}.mount  state=started enabled=yes
+    - copy: src=lug.conf dest=/etc/pacman.d/lug.conf
+    - template: src=pacman.conf.j2 dest=/etc/pacman.conf
+    
+- name: import gpg key into pacman and build user keyrings
+  block:
+    - copy: src=signing.key dest=/home/{{ build.user.name }}/
+    - command: /usr/bin/pacman-key -a /home/{{ build.user.name }}/signing.key
+    - command: /usr/bin/pacman-key --lsign-key "{{ build.makepkg.gpgkey }}"
+    - command: /usr/bin/gpg --import /home/{{ build.user.name }}/signing.key
+      become_user: "{{ build.user.name }}"
+
+
+- name: copy files
+  template: src={{ item.src }} dest={{item.dest}} mode={{item.mode}}
+  loop:
+    - { src: buildaur.j2, dest: /usr/local/bin/buildaur, mode: 755 } 
+
+- name: check if local repository exists
+  stat: path={{ build.repo.dest}}/{{build.repo.name}}.db.tar.xz
+  register: db
+
+- name: Create local repository db
+  command: /usr/bin/repo-add -s -k {{ build.makepkg.gpgkey }} {{ build.repo.dest}}/{{build.repo.name}}.db.tar.xz 
+  become_user: "{{ build.user.name }}"
+  when: db.stat.islnk is not defined
+
+- name: Add pacman sudo w/o password
+  template:
+    src: pacman_sudo.j2
+    dest: /etc/sudoers.d/{{ build.user.name }}
+
+- name: makepkg.conf
+  template:
+    src: makepkg.conf.j2
+    dest: /etc/makepkg.conf
+
+- name: Create aur utils destination directory
+  file:
+    path: "{{ build.aur.dest }}"
+    state: directory
+    mode: 0755
+    owner: "{{ build.user.name }}"
+     
+- name: Create local repo for aur utils
+  file:
+    path: "{{ build.repo.dest}}"
+    state: directory
+    mode: 0755
+    owner: "{{ build.user.name }}"
+    
+- name: Test if pacserve is installed
+  command: pacman -Qs pacserve
+  register: pacserve
+  ignore_errors: yes
+
+- name: Setup aur-sync template service 
+  template:
+    src: aur-sync@.service.j2
+    dest: /etc/systemd/system/aur-sync@.service
+
+- name: Setup zsh aliases (ba,sa,fa)
+  template:
+    src: build_functions.j2
+    dest: "{{ build.functions.dest }}" 
+
+# Begin Anisble AWX tasks
+
+- name: Install docker
+  pacman: name="docker python-docker" state=present
+
+- name: start docker
+  systemd: name="docker.service" state=started enabled=true
+
+- name: clone AWX repository
+  block:
+    - git: repo="{{ awx.repo.src }}" dest="{{ awx.repo.dest }}" force=yes
+    - template: src=inventory.j2 dest="{{ awx.repo.dest}}/installer/inventory"
+      
+

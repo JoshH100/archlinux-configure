@@ -1,0 +1,49 @@
+- name: Install tower-cli
+  pacman: name=tower-cli state=present update_cache=yes 
+
+- name: Setup AWX oragizations
+  tower_organization:
+    name: CCIT
+    description: "Colorado School of Mines: CCIT"
+    state: present
+    tower_config_file: /root/.tower_cli.cfg
+
+- name: create playbook/git mountpoint
+  file:
+    path: "{{ build.git.dest }}"
+    state: directory
+
+- name: Mount playbooks git repo
+  include_role:
+    name: ypsman.systemd_mounts
+  vars:
+    mounts:
+      git:
+        share: "{{ build.git.src }}"
+        mount: "{{ build.git.dest }}"
+        type: cifs
+        options: "credentials={{ cifs.creds.dest }},iocharset=utf8,rw,x-systemd.automount,noauto,fsc,vers={{ cifs.vers }},forceuid,forcegid,uid={{build.user.uid}},gid={{build.user.gid}},mfsymlinks,nobrl"
+        automount: true
+
+- name: Add credentials for git repo
+  tower_credential:
+    name: "awx host"
+    organization: CCIT
+    kind: scm
+    #    project: playbooks
+    ssh_key_data: "{{ lookup('file', '/home/josh/.ssh/id_rsa_mines') }}"
+    tower_config_file: /root/.tower_cli.cfg
+
+
+- name: Setup playbooks project
+  tower_project:
+    name: playbooks
+    scm_credential: "awx host"
+    description: Mines Lab and Server playbooks
+    organization: CCIT
+    state: present
+    scm_type: git
+    scm_url: "{{ build.git.playbooks }}"
+    tower_config_file: /root/.tower_cli.cfg
+
+

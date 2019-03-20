@@ -1,0 +1,11 @@
+- name: copy upgrade scripts and services
+  copy:
+    src: "{{ item.name }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { name: "usr/local/bin", dest: "/usr/local/" ,mode: "0755" }
+    - { name: "usr/share", dest: "/usr/" ,mode: "0644" }
+    #    - { name: "etc", dest "/",  mode: "0644" }
+  when: (isgui|bool)
+

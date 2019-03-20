@@ -1,0 +1,7 @@
+- name: change default shell to zsh
+  block:
+    - pacman: name=zsh state=present
+    - user: name=root shell=/bin/zsh
+    - template: src=zshrc.j2  dest=/root/.zshrc
+    - template: src=zshrc.j2  dest=/etc/skel/.zshrc
+

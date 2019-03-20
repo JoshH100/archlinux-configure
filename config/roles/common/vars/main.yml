@@ -1,0 +1,16 @@
+# set vi:syntax=yaml
+software_remove:
+  - jre7-openjdk
+  - jre7-openjdk-headless
+  - vim
+
+pacman:
+  options:
+    - UseSyslog
+    - Color
+    - TotalDownload
+    - CheckSpace
+    - UseDelta
+  preserved_configs:
+    - "etc/ssh/sshd_config"
+    - "etc/systemd/logind.conf"

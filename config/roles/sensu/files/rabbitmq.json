@@ -1,0 +1,17 @@
+{
+  "rabbitmq": [
+	{
+    "host":"{{ sensu.rabbitmq.host }}",
+	"port":5671,
+	"vhost":"/sensu",
+	"user":"{{ sensu.rabbitmq.user }}",
+	"password":"{{ sensu.rabbitmq.password }}",
+    "heartbeat": 30,
+    "prefetch": 50,
+	"ssl": {
+      "cert_chain_file": "/etc/sensu/conf.d/cert.pem",
+      "private_key_file": "/etc/sensu/conf.d/key.pem"
+		}
+    }
+  ]
+}

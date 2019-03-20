@@ -1,0 +1,54 @@
+---
+- name: Install mines logo png
+  copy:
+    src: mineslogo.png
+    dest: /usr/share/pixmaps/mineslogo.png
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - enable services
+  when: isgui|bool
+
+- name: lightdm session fix script
+  copy:
+    src: Xcleanup
+    dest: /etc/lightdm/Xcleanup
+    owner: root
+    group: root
+    mode: 0755
+  when: isgui|bool
+
+- name: Set lightdm config files
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+     - {src: 'lightdm-gtk-greeter.conf', dest: '/etc/lightdm/lightdm-gtk-greeter.conf'}
+     - {src: 'lightdm.conf', dest: '/etc/lightdm/lightdm.conf'}  
+  notify:
+    - enable services
+  when: isgui|bool
+
+    
+- name: Install mathematica license file
+  copy:
+    src: mathpass
+    dest: /opt/Mathematica/Configuration/Licensing/mathpass
+  ignore_errors: yes
+  when: isgui|bool
+
+- name: Setup sudoers
+  template:
+        src: sudoers
+        dest: /etc/sudoers
+  ignore_errors: yes
+
+- name: Setup sudo groups
+  template:
+        src: csm
+        dest: /etc/sudoers.d/csm
+  ignore_errors: yes

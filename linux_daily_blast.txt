@@ -1,0 +1,11 @@
+Machines in student Linux Labs will update and restart periodically beginning every Friday at 23:59. Machines with idle/inactive users will reboot immediatly. Machines with phisical and active users present will delay updates until the users become inactive or log off.
+
+
+This includes the following rooms:
+BB136
+CH215
+CH275
+CK182
+GRLA110
+
+For questions and concerns please contact CCIT through the Mines Help Desk at https://helpdesk.mines.edu

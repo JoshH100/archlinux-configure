@@ -1,0 +1,11 @@
+zsh:
+  theme: clint
+  term: linux
+  sources:
+    - "/usr/share/doc/pkgfile/command-not-found.zsh"
+    - "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    - "{{ build.functions.dest }}"
+build:
+  functions:
+    src: buildfunctions.j2
+    dest: /etc/zsh/buildfunctions

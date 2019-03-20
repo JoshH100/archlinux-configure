@@ -1,0 +1,51 @@
+- name: Setup buildserver 
+  hosts: server
+  strategy: free
+  gather_facts: True
+  become: yes
+  #include_vars: archvars.yml
+  vars:
+    rabbitmq:
+      user:
+        name: 'sensu'
+        password: 'sensu' 
+      port: 5670
+    zsh:
+      theme: clint
+      term: linux
+    contact_email: jhoffer@mines.edu
+    mines_repo_host: greyfox.mines.edu:15678
+    type: server
+    sudoers:
+      - ccitlabadmins
+    module_list:
+      - nfs
+      - cachefiles  
+        #  pre_tasks:
+        #    - pacman: update_cache=true
+        #      register: pacman_updated
+
+  roles:
+    - {role: buildserver, tags: ['buildserver']}
+    - role: ypsman.systemd_mounts 
+      mounts:
+        aursync:
+          share: "{{ build.aur.src }}"
+          mount: "{{ build.aur.dest }}"
+          type: cifs
+          options: "credentials={{ cifs.creds.dest }},iocharset=utf8,rw,x-systemd.automount,noauto,fsc,vers={{ cifs.vers }},forceuid,forcegid,uid={{build.user.uid}},gid={{build.user.gid}},mfsymlinks,nobrl"
+          automount: true
+        repo:
+          share: "{{ build.repo.src }}"
+          mount: "{{ build.repo.dest }}"
+          type: cifs
+          options: "credentials={{ cifs.creds.dest }},iocharset=utf8,rw,x-systemd.automount,noauto,fsc,vers={{ cifs.vers }},forceuid,forcegid,uid={{build.user.uid}},gid={{build.user.gid}},mfsymlinks,nobrl"
+          automount: true
+      tags:
+        - mounts
+    - {role: robertdebock.httpd, tags: ['httpd'] }
+    - {role: server_sensu, tags: ['server_sensu']}
+    - {role: ldap, tags: ['ldap']}
+    - {role: root, tags: ['root']}
+    - {role: archmirror, tags: ['archmirror']}
+    - {role: awx, tags: ['awx']}

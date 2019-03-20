@@ -1,0 +1,43 @@
+{
+  "rabbitmq": {
+    "host": "127.0.0.1",
+    "port": {{ rabbitmq.port }},
+    "user": "{{ rabbitmq.user.name }}",
+    "password": "{{ rabbitmq.user.password }}",
+    "vhost": "/sensu",
+    "reconnect_on_error": false,
+    "prefetch": 50
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379,
+    "reconnect_on_error": false,
+    "db": 0,
+    "auto_reconnect": true
+  },
+  "api": {
+    "host": "localhost",
+    "bind": "0.0.0.0",
+    "port": 4567
+  },
+  "handlers": {
+    "default": {
+      "type": "set",
+      "handlers": [
+        "stdout"
+      ]
+    },
+    "stdout": {
+      "type": "pipe",
+      "command": "cat"
+    }
+  },
+  "client": {
+    "name": "localhost",
+    "address": "127.0.0.1",
+    "subscriptions": [
+      "test","ALL"
+    ]
+  }
+}
+

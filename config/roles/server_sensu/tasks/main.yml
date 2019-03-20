@@ -1,0 +1,54 @@
+- name: install required packages
+  pacman:
+    name: ['rabbitmq', 'sensu-core', 'redis']
+    state: present
+
+- name: copy static config files and metrics
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+      - { src: 'conf.d',      dest: '/etc/sensu/'}
+      - { src: 'ssl',         dest: '/etc/sensu/'}
+      - { src: 'rabbitmq.config', dest: '/etc/rabbitmq/'}
+
+
+- name: remove old style rabbitmq config
+  file:
+    path: '/etc/rabbitmq/rabbitmq.conf'
+    state: absent
+
+- name: copy template config
+  template:
+    src: "{{ item.src }}" 
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'config.json.j2', dest: '/etc/sensu/config.json'}
+    - { src: 'rabbitmq.conf.j2', dest: '/etc/rabbitmq/rabbitmq.conf'}
+
+- name: start sensu, redis, and rabbitmq services 
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - 'redis.service'
+    - 'rabbitmq.service'
+    - 'sensu-api.service'
+    - 'sensu-server.service'
+    - 'sensu-client.service'
+
+- name: create sensu rabbitmq vhost
+  rabbitmq_vhost:
+    name: /sensu
+    state: present
+      
+- name: add sensu user to rabbitmq
+  rabbitmq_user:
+    user: "{{ rabbitmq.user.name }}"
+    password: "{{ rabbitmq.user.password }}"
+    vhost: /sensu
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present

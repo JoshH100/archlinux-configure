@@ -1,0 +1,24 @@
+#!/bin/python
+import subprocess
+import sys
+from systemd import login
+from systemd import journal
+
+MINUID=1000
+CAN_REBOOT = True
+
+if __name__ == '__main__':
+    for u in login.sessions():
+        UID = int(subprocess.run(["/usr/bin/loginctl show-session " + u + " | egrep -o '^User=.*' | cut -f2 -d="], shell=True, capture_output=True).stdout)
+        state = subprocess.run(["/usr/bin/loginctl show-session " + u + " | egrep -o '^Active=.*' | cut -f2 -d="], shell=True, capture_output=True).stdout
+        if UID > 1000 and not "no" in str(state):
+            CAN_REBOOT = False
+            
+if CAN_REBOOT:
+    #journal.send('No users logged in, schedueling reboot')
+    print('No users logged in, schedueling reboot')
+    subprocess.run(['/bin/shutdown', '-r', 'now'])
+else:
+    #journal.send('Users logged in, abborting reboot')
+    print('Users logged in, abborting reboot')
+#    sys.exit(1)

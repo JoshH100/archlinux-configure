@@ -1,0 +1,23 @@
+- name: Install mlocate 
+  package:
+    name: mlocate
+    state: present
+
+- name: Start and enable services
+  systemd:
+    name: updatedb.timer
+    state: started
+    enabled: yes
+
+- name: Install at
+  package:
+    name: at
+    state: present
+  when: (isgui|bool)
+
+- name: enable atd service
+  systemd:
+    name: atd.service
+    state: started
+    enabled: yes
+  when: (isgui|bool)

@@ -1,0 +1,14 @@
+[Unit]
+Description=Template to build AUR packages using aurutils
+ConditionPathExists=!/run/{{ build.run }}/lock
+
+[Service]
+Type=simple
+User=aurutils
+RuntimeDirectory={{ build.run }}
+Environment=AURDEST={{ build.aur.dest }}
+Environment=CCACHE_DIR={{ build.makepkg.ccache.dest }}
+ExecStart=/usr/local/bin/buildaur "%I"
+
+[Install]
+WantedBy=basic.target

@@ -1,0 +1,12 @@
+<h3>During Fall and Spring Semesters<h3>
+<h4>Windows</h4>
+<p>The Windows labs have patches installed biweekly on DAY.</p>
+
+<h4>Linux</h4>
+<p>The Linux labs have OS and software updates installed weekly between 23:59 Friday and 23:59 Sunday. In most cases, the labs are fully patched by 07:00 Saturday.</p>
+
+<h3>Summer and Winter Break<h3>
+<h4>Windows</h4>
+<p>During the summer, the windows labs are rebuilt so that new software versions can be installed and new machines can be installed if applicable for the lab. These outages are scheduled through Pastra and announced in the Daily Blast. </p>
+<h4>Linux</h4>
+<p>The Linux labs undergo the same software update cycle as the Fall and Spring semesters but also may have scheduled downtime for the installation of new machines and or cleaning.

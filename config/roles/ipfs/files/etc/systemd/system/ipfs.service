@@ -1,0 +1,12 @@
+[Unit]
+Description=IPFS daemon
+After=network.target
+
+[Service]
+User=ipfs
+Environment=LIBP2P_FORCE_PNET=1
+ExecStart=/usr/bin/ipfs daemon
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

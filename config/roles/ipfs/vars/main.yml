@@ -1,0 +1,8 @@
+ipfs_setup:
+  - ipfs init
+  - ipfs bootstrap rm --all
+  - ipfs config --json Experimental.FilestoreEnabled true
+
+ipfs_bootstrap:
+  - /ip4/138.67.130.54/tcp/4001/ipfs/QmeAGPtpHRKjqrQw2w7JbdMdGfYU6KVcqVhQaTQNHzMPbp
+  - /ip4/71.211.128.188/tcp/35629/ipfs/QmUCPKnV2j5oZLtvx5sqEd4BMZVBQjgh2FE8wrd3vqEm3Z

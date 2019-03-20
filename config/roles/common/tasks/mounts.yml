@@ -1,0 +1,60 @@
+---
+- name: copy idmapd.conf
+  copy:
+    src: idmapd.conf
+    dest: /etc/idmapd.conf
+
+- name: Install packages for nfs
+  pacman:
+    name: nfs-utils
+    state: latest
+
+- name: Mount user home folders
+  mount:
+    path: /u
+    src: files.mines.edu:/export/fermat
+    fstype: nfs4
+    state: present
+    opts: auto,x-systemd.automount,x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,fsc
+  async: 20
+  when: isgui|bool
+
+- name: Mount files.mines.edu folders 
+  mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: nfs
+    state: mounted 
+    opts: auto,x-systemd.automount,x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,vers=3
+  with_items:
+    - { path: '/gpfc', src: 'files.mines.edu:/export/gpfc' }
+    - { path: '/scratch', src: 'files.mines.edu:/export/scratch' }
+  async: 20
+  when: isgui|bool
+
+- name: Mount isengard folders 
+  mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: nfs
+    state: mounted 
+    opts: auto,x-systemd.automount,x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,vers=3
+  with_items:
+    - { path: '/data', src: 'isengard.mines.edu:/data' }
+    - { path: '/usr/local/cwp', src: 'isengard.mines.edu:/usr/local/cwp' }
+    - { path: '/class', src: 'isengard.mines.edu:/class' }
+    - { path: '/class/gpgn461-201780', src: 'files.mines.edu:/export/class/gpgn461' }
+    - { path: '/usr/local/sedpak54', src: 'isengard.mines.edu:/usr/local/sedpak54' }
+  when: ("gc297" in  ansible_hostname ) and (isgui|bool)
+  async: 20
+
+- name: load NFS module at boot
+  template:
+        src: modules.conf
+        dest: /etc/modules-load.d/modules.conf
+
+- name: Enable systemd-networkd-wait-online.service
+  service:
+    name: systemd-networkd-wait-online.service
+    state: started
+    enabled: true

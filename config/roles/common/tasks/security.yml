@@ -1,0 +1,39 @@
+- name: Update pacman cache
+  pacman:
+    update_cache: yes
+
+- name: Install ufw and extras
+  package:
+    name: ufw ufw-extras
+    state: latest
+
+- name: enable ufw logging
+  ufw:
+    logging: on
+    state: enabled
+    policy: allow
+
+- name: Setup ufw
+  ufw:
+    rule: allow 
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  with_items:
+    - { port: 'ssh', proto: 'tcp'}
+    - { port: '7000', proto: 'tcp'}
+    - { port: '7199', proto: 'tcp'}
+    - { port: '9042', proto: 'tcp'}
+
+- name: Allow incoming by default
+  ufw:
+    state: reloaded
+    policy: allow 
+    direction: incoming
+    
+
+- name: Start and enable ufw
+  systemd:
+    name: ufw
+    state: started 
+    enabled: no
+  when: (isserver|bool)

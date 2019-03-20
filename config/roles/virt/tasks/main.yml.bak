@@ -1,0 +1,30 @@
+- name: Install packages for libvirtd, qemu, and lxc
+  pacman:
+      name: '{{ item }}'
+      state: latest
+      update_cache: yes
+  with_flattened:
+    - '{{ libvirtd_packages }}'
+    - '{{ lxc_packages }}'
+    - '{{ qemu_packages }}'
+
+- name: Make sure local facts dir exists
+  file:
+    path: '/etc/ansible/facts.d'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+
+- name: Save libvirtd local facts
+  template:
+    src: 'etc/ansible/facts.d/libvirtd.fact.j2'
+    dest: '/etc/ansible/facts.d/libvirtd.fact'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+    register: libvirtd__register_facts
+
+- name: Update Ansible facts if they were modified
+  action: setup
+  when: libvirtd__register_facts|changed

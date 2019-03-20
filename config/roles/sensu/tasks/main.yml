@@ -1,0 +1,46 @@
+- name: Install sensu-core
+  pacman:
+    name: sensu
+    state: present
+    update_cache: yes
+
+- name: create sensu group
+  group: name=sensu state=present
+
+- name: create sensu user
+  user: name=sensu group=sensu
+
+- name: create sensu directories
+  file:
+    path: /etc/sensu/conf.d
+    owner: sensu 
+    group: sensu 
+    state: directory
+
+- name: sensu config files
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: sensu
+    group: sensu
+    mode: 0640
+  with_items:
+    - {src: 'transport.json', dest: '/etc/sensu/conf.d/'}
+    - {src: 'key.pem', dest: '/etc/sensu/conf.d/'}
+    - {src: 'cert.pem', dest: '/etc/sensu/conf.d/'}
+    - {src: 'sensu-client.service', dest: '/etc/systemd/system/'}
+      #    - {src: 'rabbitmq.json', dest: '/etc/sensu/conf.d/'}
+
+- name: sensu config 
+  template:
+    src: client.json.j2
+    dest: /etc/sensu/conf.d/client.json
+    owner: sensu
+    group: sensu
+    mode: 0640
+    
+- name: enable sensu client service
+  service:
+    name: sensu-client
+    state: restarted 
+    enabled: yes

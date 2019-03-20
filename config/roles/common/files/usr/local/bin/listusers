@@ -1,0 +1,28 @@
+#!/bin/python
+import subprocess
+import time
+import datetime
+from systemd import login
+
+MINUID=900
+
+if __name__ == '__main__':
+    sessions = {}
+    for u in login.sessions():
+        sessions[u] = {}
+        s = subprocess.Popen(["/usr/bin/loginctl", "show-session",u],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        for line in iter(s.stdout.readline, b''):
+            varvalue = line.decode('ascii').rstrip().split('=')
+            key = varvalue[0]
+            value = varvalue[1]
+            sessions[u][key] = value
+    
+    for k,v in sessions.items():
+        if int(v['User']) > MINUID:
+            timeIdle = int(int(time.time()) - int(v['IdleSinceHint'])*10**-6)
+            durationIdle = str(datetime.timedelta(seconds=timeIdle))
+            if "y" in v['IdleHint']:
+                print('{:^15} {:^15} {:<15}'.format(v['Name'],v['State'],durationIdle))
+            else:
+                print('{:^15} {:^15} {:<15}'.format(v['Name'],v['State'],"Not Idle"))
+

@@ -1,0 +1,20 @@
+localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python"
+
+[all:vars]
+dockerhub_base=ansible
+awx_task_hostname=awx
+awx_web_hostname=awxweb
+host_port={{ awx.http.port }}
+pg_username=awx
+pg_database=awx
+pg_port=5432
+admin_user=admin
+create_preload_data=True
+
+rabbitmq_erlang_cookie={{ awx.rabbitmq.erlangcookie }}
+rabbitmq_password={{ awx.rabbitmq.password }}
+admin_password={{ awx.admin.password }}
+secret_key={{ awx.secretkey }}
+pg_password={{ awx.pg.password }} 
+postgres_data_dir={{ awx.pg.datadir }}
+docker_compose_dir={{ awx.compose.dir }}

@@ -1,0 +1,9 @@
+[Unit]
+Description=Check if reboot is needed for updates
+#ConditionPathExists=/system-update
+
+[Timer]
+OnCalendar=2:00:00
+
+[Install]
+WantedBy=timers.target

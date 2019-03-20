@@ -1,0 +1,8 @@
+[Unit]
+Description=reboot for updates on demand
+
+[Path]
+PathExists=/system-update
+
+[Install]
+WantedBy=basic.target

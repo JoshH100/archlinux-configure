@@ -1,0 +1,11 @@
+---
+- name: Install notify-users script
+  copy:
+    src: notify-users 
+    dest: /usr/local/bin/ 
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  when: (isgui|bool)
+

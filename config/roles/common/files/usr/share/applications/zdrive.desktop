@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=zdrive
+Comment=Mount ADIT Z Drive
+Exec=/usr/local/bin/zdrive
+Icon=folder
+Terminal=false
+Type=Application
+StartupNotify=false
+Categories=GNOME;GTK;Utility;Core;Mines
+MimeType=inode/directory;application/x-gnome-saved-search;

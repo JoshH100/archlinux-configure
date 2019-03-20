@@ -1,0 +1,13 @@
+# vim syntax=j2
+ttyctl -f
+autoload -Uz compinit promptinit
+compinit
+promptinit
+prompt {{ zsh.theme }}
+export TERM={{ zsh.term }}
+
+{% for s in zsh.sources %}
+if [ -f {{s}} ]; then
+	source {{s}}
+fi
+{% endfor %}

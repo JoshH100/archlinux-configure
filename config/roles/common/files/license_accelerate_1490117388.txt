@@ -1,0 +1,1 @@
+{"product": "accelerate", "vendor": "continuum", "name": "jnorrisatcsm", "end_date": "2018-03-21", "issued": "2017-03-21", "company": null, "qty": 1, "_license_version": "1.1", "sig": "5b1fdd03f38be4859dadd3599ee308e778a0f43964824a28aaad88ae4d8300abe30db811aaafc841f15a05b25a5f7bf88283c95b4a5b826efea06c5794472013", "packages": "numbapro mkl", "email": "jnorris@mines.edu"}

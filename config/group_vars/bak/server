@@ -1,0 +1,16 @@
+# set vi:syntax=yaml
+software:
+  - base-devel
+  - open-vm-tools
+  - graphite
+  - aurutils-git
+  - apache
+  - grafana  
+  - sensu-go-backend
+
+isgui: false
+isserver: true
+
+sshd_allowed_groups: root ccitserveradmin ccitlabadmins
+mkinitcpio_modules: "vmw_balloon vmw_pvscsi vsock vmw_vsock_vmci_transport"
+services: vmtoolsd.service vmware-vmblock-fuse.service

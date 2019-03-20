@@ -1,0 +1,53 @@
+- name: check IPFS setup
+  stat:
+    path: /home/ipfs/.ipfs
+  register: ipfs_status
+
+
+- name: Install go-ipfs
+  pacman:
+    name: go-ipfs
+    state: present
+
+
+- name: Create ipfs user
+  user:
+    name: ipfs
+    shell: /bin/zsh
+    
+- name: init ipfs
+  shell: ipfs init
+  become: yes
+  become_user: ipfs
+  when: ipfs_status.stat.islnk is not defined
+
+
+- name: Copy IPFS service
+  copy:
+    src: etc/systemd/system/ipfs.service
+    dest: /etc/systemd/system/
+    owner: root
+    group: root
+
+- name: Copy IPFS private swarm key
+  copy:
+    src: swarm.key
+    dest: /home/ipfs/.ipfs/
+    owner: ipfs
+
+
+- name: Setup IPS filestore
+  shell: ipfs config --json Experimental.FilestoreEnabled true
+  become: yes
+  become_user: ipfs
+
+- name: Add bootstrap nodes
+  shell: ipfs bootstrap add {{item}}
+  become: yes
+  become_user: ipfs
+  with_items: "{{ ipfs_bootstrap }}"
+
+- name: Start IPFS service
+  systemd:
+    name: ipfs
+    state: started

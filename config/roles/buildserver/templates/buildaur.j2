@@ -1,0 +1,18 @@
+# vi:syntax=sh
+#!/bin/bash
+CHROOT="{{ build.makepkg.chroot.dest }}"
+PACKAGES="{{ build.makepkg.prepackages }}"
+
+touch "/run/{{ build.run }}/lock"
+# This test could result in needing to run this script twice in order to install $PACKAGES 
+if [- d "$CHROOT"]; then 
+	sudo pacstrap "$CHROOT" $PACKAGES
+else
+	echo "$CHROOT does not exist yet, proceding without installing packages"
+fi
+yes | /usr/bin/aur sync -c -n -s --nover-shallow --noview "$1" -M {{ build.makepkg.dest }} --bind-rw {{ build.makepkg.ccache.src }}:{{ build.makepkg.ccache.dest }}
+
+EXIT=$?
+rm /run/{{ build.run}}/lock
+
+exit $EXIT

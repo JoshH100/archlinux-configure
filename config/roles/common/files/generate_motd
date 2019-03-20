@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "Hostname: $(hostname)" 
+echo "Archlinux kernel version: $(pacman -Q linux)"
+echo "Send software/package requests to helpdesk@mines.edu"

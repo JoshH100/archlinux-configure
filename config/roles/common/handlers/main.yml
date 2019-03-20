@@ -1,0 +1,34 @@
+- name: enable services
+  service:
+    name: "{{ item }}"
+    state: started 
+    enabled: yes
+  with_items:
+    - avahi-daemon.service
+    - org.cups.cupsd.service
+    - lightdm.service
+    - sssd.service
+    - systemd-timesyncd.service
+
+      #- name: 'Enable PSD'
+      #  command: systemctl --global disable psd.service
+      #  ignore_errors: yes
+    
+- name: Configure mathematica license servers
+  copy:
+    src: mathpass
+    dest: /opt/Mathematica/Configuration/Licensing/mathpass
+    mode: 0755
+  ignore_errors: true
+
+- name: pacman updated
+  set_fact:
+    pacman_old: "false"
+
+- name: Add and sign sublime key, and populate pacman keyring
+  command: '{{item}}'
+  with_items:
+          - 'pacman-key --add /etc/pacman.d/sublimehq-pub.gpg'
+          - 'pacman-key --lsign-key 8A8F901A'
+          - 'pacman-key --populate'
+

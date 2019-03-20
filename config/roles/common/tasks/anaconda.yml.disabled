@@ -1,0 +1,33 @@
+- name: Create folder for anaconda licenses
+  file:
+    path: '{{item}}'
+    state: directory
+    owner: root
+  with_items:
+          - '/opt/anaconda/licenses'
+          - '/opt/anaconda2/licenses'
+  ignore_errors: yes
+  when: (isgui|bool)
+
+
+- name: Insall anaconda licenses
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  with_items:
+    - {src: 'license_accelerate_1490117388.txt', dest: '/opt/anaconda/licenses/'}
+    - {src: 'license_accelerate_1490117388.txt', dest: '/opt/anaconda2/licenses/'}
+    - {src: 'license_iopro_1490117384.txt', dest: '/opt/anaconda/licenses/'}
+    - {src: 'license_iopro_1490117384.txt', dest: '/opt/anaconda2/licenses/'}
+    - {src: 'license_mkl_1490117355.txt', dest: '/opt/anaconda/licenses/'}
+    - {src: 'license_mkl_1490117355.txt', dest: '/opt/anaconda2/licenses/'}
+  ignore_errors: yes
+  when: (isgui|bool)
+
+- name: Install anaconda iopro (disabled)
+  command: '{{item}}'
+  with_items:
+          - '/opt/anaconda/bin/conda install iopro'
+          - '/opt/anaconda2/bin/conda install iopro'
+  ignore_errors: yes
+  when: false

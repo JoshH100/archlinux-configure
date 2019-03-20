@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Remove
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Remove package caches older than 4 revisions
+When = PostTransaction
+Exec = /usr/bin/paccache -rvk4

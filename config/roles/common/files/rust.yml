@@ -1,0 +1,29 @@
+- name: Update pacman cache
+  pacman:
+    update_cache: yes
+
+- name: Install rustup 
+  package:
+    name: rustup
+    state: latest
+
+- name: Remove racer repo package
+  package:
+    name: rust-racer
+    state: absent
+
+- name: Install nightly toolchain
+  command: rustup install nightly
+
+- name: Set nightly toolchain as default
+  command: rustup default nightly
+
+- name: Install rust source
+  command: rustup component add rust-src
+
+- name: Install racer 
+  command: cargo install racer -q
+
+- name: Install clippy
+  command: cargo install clippy -q
+

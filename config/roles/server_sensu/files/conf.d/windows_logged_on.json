@@ -1,0 +1,7 @@
+{
+  "mutators": {
+    "logged_on_graphite": {
+      "command": "/etc/sensu/mutators/logged_on.rb"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+#!/bin/python
+import subprocess
+import time
+import datetime
+from systemd import login
+
+MINUID=900
+MAXIDLE=25
+
+if __name__ == '__main__':
+    sessions = {}
+    for u in login.sessions():
+        sessions[u] = {}
+        s = subprocess.Popen(["/usr/bin/loginctl", "show-session",u],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        for line in iter(s.stdout.readline, b''):
+            varvalue = line.decode('ascii').rstrip().split('=')
+            key = varvalue[0]
+            value = varvalue[1]
+            sessions[u][key] = value
+    
+    for k,v in sessions.items():
+        if int(v['User']) > MINUID:
+            hoursTimeIdle = int(int(time.time()) - int(v['IdleSinceHint'])*10**-6)/60**2
+            if "y" in v['IdleHint'] and hoursTimeIdle > MAXIDLE:
+                print("would kick {}".format(v['Name'])) 

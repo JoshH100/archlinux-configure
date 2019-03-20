@@ -1,0 +1,8 @@
+[Unit]
+Description=Download updates daily
+
+[Timer]
+OnCalendar=0:00:00
+
+[Install]
+WantedBy=timers.target

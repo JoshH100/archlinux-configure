@@ -1,0 +1,32 @@
+---
+- name: Create vm in dlabvm-01-internal
+  gather_facts: no
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3"
+  hosts: localhost
+  tasks:
+    - set_fact:
+        vm_name: "Archlinux Test1"
+        datacenter: "Main Campus VDI"
+        cluster_name: "dlabvm-01.mines.edu"
+        datastore: "dlabvm-01-internal"
+        vlan: "LabD"
+    - vmware_guest:
+        guest_id: "other3xLinux64Guest" 
+        datacenter: "{{ datacenter }}"
+        datastore: "{{ datastore }}"
+        validate_certs: no
+        folder: /labteam/
+        name: "{{ vm_name }}"
+        state: poweredon
+        cluster: "{{ cluster_name }}"
+        disk:
+          - size_gb: 20
+        hardware:
+          memory_mb: 10000
+          num_cpus: 12
+          num_cpu_cores_per_socket: 4
+          scsi: paravirtual
+          boot_firmware: efi
+        networks:
+          - name: "{{ vlan }}"

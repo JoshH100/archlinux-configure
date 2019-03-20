@@ -1,0 +1,26 @@
+---
+- name: Install motd
+  copy:
+    src: generate_motd
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+
+- name: Install motd hook
+  copy:
+    src: motd.hook
+    dest: /etc/pacman.d/hooks/
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+
+- name: Install distcc config 
+  copy:
+    src: distccd
+    dest: /etc/conf.d/distccd
+    owner: root
+    group: root
+    mode: 0644

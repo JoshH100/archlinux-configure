@@ -1,0 +1,14 @@
+[Unit]
+Description=aursync mount location
+After=network-online.target
+Wants=network-online.target
+
+[Mount]
+What={{ build.aur.src }}
+Where={{ build.aur.dest }}
+Options=credentials={{ cifs.creds.dest }},iocharset=utf8,rw,x-systemd.automount,noauto,fsc,vers={{ cifs.vers }},uid={{build.user.uid}},gid={{build.user.gid}},forceuid,forcegid
+Type=cifs
+TimeoutSec=15
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,5 @@
+- name: Post install config 
+  hosts: lab,momento
+  gather_facts: True
+  roles:
+    - {role: ipfs, tags: ['ipfs']}

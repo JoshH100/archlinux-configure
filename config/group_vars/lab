@@ -1,0 +1,8 @@
+# set vi:syntax=yaml
+software:
+  - mines-meta
+  - base-devel
+
+isgui: yes
+isdell: yes
+# sshd_allowed_groups: root 

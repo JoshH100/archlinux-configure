@@ -1,0 +1,25 @@
+---
+- name: Upload stuff to a vmware datacenter (test)
+  gather_facts: no
+  #  vars_files:
+  #  - vcenter_vars.yml
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3"
+  hosts: localhost
+  tasks:
+    - set_fact:
+        new_vm_name: "Archlinux TestRename"
+        datacenter: "Main Campus VDI"
+        cluster_name: "dlabvm-02.mines.edu"
+        datastore: "dlabvm-02-internal"
+        src: /data/archimage/image_works_once.raw
+    - vsphere_copy:
+        host: "{{ lookup('env', 'VMWARE_HOST') }}"
+        login: "{{ lookup('env', 'VMWARE_USER') }}"
+        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+        src: "{{ src }}"
+        datacenter: "{{ datacenter }}"
+        datastore: "{{ datastore }}"
+        path: isos/
+        validate_certs: no
+      delegate_to: localhost

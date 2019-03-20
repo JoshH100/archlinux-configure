@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "check-windows-process": {
+      "type": "standard",
+      "command": "Powershell.exe -NonInteractive -NoProfile -ExecutionPolicy Bypass -NoLogo -File C:\\opt\\sensu\\plugins\\check-windows-process.ps1 CcmExec",
+      "subscribers": [ "windows" ],
+      "refresh": 600,
+      "interval": 600
+    }
+  }
+}

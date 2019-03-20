@@ -1,0 +1,3 @@
+sensu_redis_pkg_name: redis
+sensu_redis_service_name: redis
+

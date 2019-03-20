@@ -1,0 +1,10 @@
+---
+- name: Install systemd-boot entries 
+  copy:
+    src: '{{ item }}'
+    dest: '/boot/loader/entries/'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - 'arch.conf'

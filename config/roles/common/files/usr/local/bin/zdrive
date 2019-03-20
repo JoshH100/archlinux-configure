@@ -1,0 +1,9 @@
+#!/bin/zsh
+ZFOLDER="$HOME/zdrive"
+
+if [ -h $ZFOLDER -a ! -e $ZFOLDER ]; then
+	rm $ZFOLDER
+fi
+
+/usr/bin/gio mount "smb://ADIT;${USER}:test\@hornet-ct.mines.edu/Users/${USER:0:1}/${USER}"
+ln -s "$XDG_RUNTIME_DIR/gvfs/smb-share:domain=ADIT,server=hornet-ct.mines.edu,share=users,user=${USER}/${USER:0:1}/${USER}" $ZFOLDER

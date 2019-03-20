@@ -1,0 +1,12 @@
+[Unit]
+Description=Schedule reboot for systemd updates
+#AssertPathExistsGlob=!/run/user/*
+AssertPathExists=/system-update
+
+[Service]
+Type=oneshot
+#ExecStart=/usr/bin/shutdown -r
+ExecStart=/usr/local/bin/schedule-reboot
+
+[Install]
+WantedBy=basic.target

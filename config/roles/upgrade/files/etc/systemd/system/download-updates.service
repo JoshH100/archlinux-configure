@@ -1,0 +1,9 @@
+[Unit]
+Description=Download available updates
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/download-updates
+
+[Install]
+WantedBy=basic.target

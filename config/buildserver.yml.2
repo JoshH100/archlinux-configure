@@ -1,0 +1,56 @@
+- name: Setup buildserver 
+  hosts: server
+  strategy: free
+  gather_facts: True
+  become: yes
+  vars:
+    cifs:
+      options: "credentials={{ cifs.creds.dest }},iocharset=utf8,rw,x-systemd.automount,noauto,fsc,vers={{ cifs.vers }},uid={{build.user.uid}},gid={{build.user.gid}}, forceuid, forcegid, mfsymlinks, nobrl"
+    rabbitmq:
+      user:
+        name: 'sensu'
+        password: 'sensu' 
+      port: 5670
+    zsh:
+      theme: clint
+      term: linux
+    contact_email: jhoffer@mines.edu
+    mines_repo_host: greyfox.mines.edu:15678
+    type: server
+    sudoers:
+      - ccitlabadmins
+    module_list:
+      - nfs
+      - cachefiles  
+        #  pre_tasks:
+        #    - pacman: update_cache=true
+        #      register: pacman_updated
+
+  roles:
+    - role: systemd_mount
+      mounts:
+        aursync:
+          share: "{{ build.aur.src }}"
+          mount: "{{ build.aur.dest }}"
+          type: cifs
+          options: "{{ cifs.options }}" 
+          automount: true
+        repo:
+          share: "{{ build.repo.src }}"
+          mount: "{{ build.repo.dest }}"
+          type: cifs
+          options: "{{ cifs.options }}" 
+          automount: true
+        mirror:
+          share: "{{ build.mirror.src }}"
+          mount: "{{ build.mirror.dest }}"
+          type: cifs
+          options: "{{ cifs.options }}" 
+          automount: true
+          #  tags:
+            #        - mounts
+    - {role: buildserver, tags: ['buildserver']}
+    - {role: server_sensu, tags: ['server_sensu']}
+    - {role: ldap, tags: ['ldap']}
+    - {role: root, tags: ['root']}
+    - {role: archmirror, tags: ['archmirror']}

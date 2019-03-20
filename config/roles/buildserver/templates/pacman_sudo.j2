@@ -1,0 +1,5 @@
+{{ build.user.name }} ALL=(ALL) NOPASSWD: /usr/bin/pacman
+{{ build.user.name }} ALL = (root) NOPASSWD: SETENV: /usr/bin/makechrootpkg
+{{ build.user.name }} ALL = (root) NOPASSWD: /usr/bin/mkarchroot, /usr/bin/arch-nspawn
+{{ build.user.name }} ALL = (root) NOPASSWD: /bin/install
+{{ build.user.name }} ALL = (root) NOPASSWD: /usr/bin/pacstrap

@@ -1,0 +1,20 @@
+---
+libvirtd_packages:
+  - 'libvirt'
+  - 'ebtables'
+  - 'dnsmasq'
+  - 'openbsd-netcat'
+  - 'virt-manager'
+  - 'virt-viewer'
+  - 'libvirt-python'
+
+lxc_packages:
+  - 'lxc'
+  - 'arch-install-scripts'
+  - 'debootstrap'
+
+qemu_packages:
+  - 'qemu'
+  - 'qemu-arch-extra'
+  - 'qemu-block-iscsi'
+  - 'ovmf'

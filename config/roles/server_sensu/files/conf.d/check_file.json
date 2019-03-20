@@ -1,0 +1,15 @@
+{
+    "checks": {
+        "check_file": {
+            "handlers": [
+                "default"
+            ],
+            "command": "/etc/sensu/plugins/check-file.rb -f /root/sensu_test.txt",
+            "interval": 60,
+            "occurrences": 3,
+            "subscribers": [
+		"none"	
+            ]
+        }
+    }
+}

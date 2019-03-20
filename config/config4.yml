@@ -1,0 +1,36 @@
+- name: Post install config 
+  hosts: lab
+  strategy: free
+  gather_facts: True
+  vars:
+    sensu:
+      rabbitmq:
+        host: labbuild2.mines.edu
+        user: "client"
+        password: "sm2JNjS6lhGjKnPFnp5w" 
+    zsh:
+      theme: clint
+      term: linux
+    contact_email: jhoffer@mines.edu
+    mines_repo_host: greyfox.mines.edu:15678
+    type: lab
+    repos:
+      mines2:
+        server: labbuild-test1.mines.edu
+    sudoers:
+      - ccitlabadmins
+    module_list:
+      - nfs
+      - cachefiles  
+  pre_tasks:
+    - pacman: update_cache=true
+      register: pacman_updated
+
+  roles:
+    - {role: common, tags: ['common']}
+    - {role: sensu , tags: ['sensu']}
+    - {role: ldap, tags: ['ldap']}
+    - {role: virt, tags: ['virt']}
+    - {role: upgrade, tags: ['upgrade']}
+    - {role: ipfs, tags: ['ipfs']}
+    - {role: root, tags: ['root']}

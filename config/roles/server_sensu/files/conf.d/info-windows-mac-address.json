@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "info-windows-mac-address": {
+      "type": "metric",
+      "command": "Powershell.exe -NonInteractive -NoProfile -ExecutionPolicy Bypass -NoLogo -File C:\\opt\\sensu\\plugins\\info-windows-mac-address.ps1",
+      "subscribers": [ "windows" ],
+      "interval": 240
+    }
+  }
+}
+

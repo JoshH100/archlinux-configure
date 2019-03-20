@@ -1,0 +1,13 @@
+#!/bin/bash
+
+for u in /run/user/*; do
+	AUID=$(basename ${u})
+	echo $AUID
+	NAME=$(getent passwd $AUID | cut -d':' -f1 -)
+	URGENCY="$3"
+	DURATION="$4"
+	if [ -z "$URGENCY" ]; then URGENCY="normal"; fi
+	if [ -z "$DURATION"]; then DURATION="5000"; fi
+	echo $DURATION $URGENCY
+	sudo -u "$NAME" DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/"$AUID"/bus notify-send "$1" "$2" -u "$URGENCY" -t "$DURATION" &
+done

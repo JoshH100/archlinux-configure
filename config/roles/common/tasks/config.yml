@@ -1,0 +1,30 @@
+---
+- name: config files 
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+     - {src: 'environment', dest: '/etc/environment'}
+     - {src: 'hooks/linux-modules-post.hook', dest: '/etc/pacman.d/hooks/linux-modules-post.hook'}
+     - {src: 'hooks/linux-modules-pre.hook', dest: '/etc/pacman.d/hooks/linux-modules-pre.hook'}
+     - {src: 'linux-modules-cleanup.service', dest: '/etc/systemd/system/linux-modules-cleanup.service'}
+     - {src: 'logind.conf', dest: '/etc/systemd/logind.conf' }
+     - {src: '40-max-user-watches.conf', dest: '/etc/sysctl.d/40-max-user-watches.conf'}  
+
+- name: Enable linux-modules-cleanup
+  service:
+    name: linux-modules-cleanup.service
+    enabled: yes
+
+- name: Enable ansible userprofile playbook at login
+  lineinfile: state=present line="ansible-playbook /usr/share/mines-playbooks/archlinux-userprofile/userprofile.yml >> /tmp/ansible.log" insertbefore="^# Run user xsession shell script" path=/etc/lightdm/Xsession
+  when: (isgui|bool)
+
+- name: Create empty smbclient.conf
+  copy:
+    content: ""
+    dest: /etc/samba/smb.conf
+    force: no

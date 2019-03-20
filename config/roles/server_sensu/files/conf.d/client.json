@@ -1,0 +1,9 @@
+{
+  "client": {
+    "name": "localhost",
+    "address": "127.0.0.1",
+    "subscriptions": [ "ALL" ],
+    "safe_mode": false
+  }
+}
+
