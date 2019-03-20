@@ -46,4 +46,10 @@
     scm_url: "{{ build.git.playbooks }}"
     tower_config_file: /root/.tower_cli.cfg
 
+- name: setup AWX inventory
+  tower_inventory:
+    tower_config_file: /root/.tower_cli.cfg
+    name: Lab
+    organization: CCIT
+    state: present
 

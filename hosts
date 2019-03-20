@@ -8,17 +8,38 @@ ch215l-[01:16]
 [ch275l]
 ch275l-[01:08]
 
-[grla110]
+[gc297]
+gc297-30
+
+[grla]
 grla110i
-grla110-[01:30]
+grla110-[01:28]
 
 [ck182]
 ck182-[18:34]
+
 [lab:children]
 bb136
 ch215l
 ch275l
 grla
 ck182
-gc297
 
+[servers]
+plabnagios
+plabpuppet
+
+[bbw220]
+bbw220-[01:30]
+
+[ctb56]
+ctb56i
+ctb56-[01:30]
+
+[bb316a]
+bb316ai
+bb316a-[01:36]
+
+[server]
+labbuild-test1
+labbuild-test2
