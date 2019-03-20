@@ -1,5 +1,7 @@
 ---
 - name: Build AUR package
   hosts: all
+  become: yes
+  become: aurutils
   roles:
     - build 
