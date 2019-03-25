@@ -35,8 +35,8 @@
   tags: [fscache]
 - import_tasks: ssh.yml
   tags: [ssh]
-- import_tasks: sensu.yml
-  tags: [sensu]
+  #- import_tasks: sensu.yml
+  #tags: [sensu]
 - import_tasks: notify.yml
   tags: [notify]
 - import_tasks: zdrive.yml

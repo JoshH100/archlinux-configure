@@ -56,5 +56,4 @@
 - name: Enable systemd-networkd-wait-online.service
   service:
     name: systemd-networkd-wait-online.service
-    state: started
     enabled: true

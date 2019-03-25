@@ -1,5 +1,5 @@
 - name: Post install config 
-  hosts: lab
+  hosts: all 
   strategy: free
   gather_facts: True
   vars:
