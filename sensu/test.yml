@@ -1,3 +1,0 @@
-- hosts: server
-  roles:
-    - role: sensu.sensu
