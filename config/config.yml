@@ -3,6 +3,7 @@
   strategy: free
   gather_facts: True
   vars:
+    isdell: true
     sensu:
       rabbitmq:
         host: plabmon.mines.edu
@@ -30,7 +31,9 @@
     - {role: common, tags: ['common']}
     - {role: sensu , tags: ['sensu']}
     - {role: ldap, tags: ['ldap']}
-    - {role: virt, tags: ['virt']}
-    - {role: upgrade, tags: ['upgrade']}
+    #- {role: virt, tags: ['virt']}
     - {role: ipfs, tags: ['ipfs']}
     - {role: root, tags: ['root']}
+    # upgrade (software install) takes the longest
+    - {role: upgrade, tags: ['upgrade']}
+    - {role: bios, tags: ['bios']}
