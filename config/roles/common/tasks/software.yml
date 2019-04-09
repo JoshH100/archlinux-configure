@@ -11,13 +11,13 @@
       name: "{{ item }}"
       state: absent
   ignore_errors: yes 
-  with_flattened:
-    - "{{ software_remove }}"
+  loop:
+    - "{{ packages_remove }}"
 
 - name: Install software
   package:
       name: "{{ item }}"
       state: present
   ignore_errors: no 
-  with_flattened:
-    - "{{ software}}"
+  loop:
+    - "{{ packages_install }}"
