@@ -1,0 +1,9 @@
+[Unit]
+Description=Install updates on-demand
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/safe-upgrade
+
+[Install]
+WantedBy=basic.target

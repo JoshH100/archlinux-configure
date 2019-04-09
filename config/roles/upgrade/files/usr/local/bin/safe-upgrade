@@ -1,0 +1,10 @@
+#!/bin/bash
+
+NUM_USERS=$(/usr/local/bin/listusers | wc -l)
+if [ $NUM_USERS -eq 0 ]
+then
+	echo "No users logged on, starting upgrade"
+	yes | pacman -Syu --noconfirm
+else
+	exit 1
+fi	
