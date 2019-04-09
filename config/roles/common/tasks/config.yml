@@ -23,9 +23,9 @@
   lineinfile: state=present line="ansible-playbook /usr/share/mines-playbooks/archlinux-userprofile/userprofile.yml >> /tmp/ansible.log" insertbefore="^# Run user xsession shell script" path=/etc/lightdm/Xsession
   when: (isgui|bool)
 
-# TODO: create /etc/samba folder first
+# TODO: create /etc/samba folder first - testing now
 - name: Create empty smbclient.conf
-  copy:
-    content: ""
-    dest: /etc/samba/smb.conf
-    force: no
+  block:
+    - file: path=/etc/samba/ state=directory
+    - pacman: name=samba state=present
+    - copy: content="" dest=/etc/samba/smb.conf force=no
