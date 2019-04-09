@@ -31,7 +31,7 @@
 
 - name: install packages for ldap/kerboros, dell configure
   pacman:
-    name: openldap,nss-pam-ldapd,sssd, command-configure, ufw
+    name: openldap,nss-pam-ldapd,sssd, dell-command-configure, ufw
     state: present 
 
 - name: avahi
@@ -46,7 +46,6 @@
     name: cups, gtk3 cups-pdf
     state: present
   notify: enable services
-  when: isgui|bool
 
 - name: enable and (re)start services
   command: echo
