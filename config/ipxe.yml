@@ -4,6 +4,9 @@
   gather_facts: True
   become: no 
   vars:
+    secureboot:
+      cert: /etc/secureboot/DB.crt
+      key: /etc/secureboot/DB.key
     ipxe:
       dest: /mnt/pxe/
       images:
