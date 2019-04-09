@@ -1,0 +1,9 @@
+[Unit]
+Description=Keep pacman keyring updated
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pacman-key --refresh-keys
+
+[Install]
+WantedBy=basic.target
