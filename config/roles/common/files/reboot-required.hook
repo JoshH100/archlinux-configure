@@ -8,6 +8,6 @@ Target = usr/lib/modules/*
 Target = boot/*-ucode.img
 
 [Action]
-Description = Creates /reboot-required if kernel or initramfs changes 
+Description = Creates /system-update if kernel or initramfs changes 
 When = PostTransaction
-Exec = /bin/sh -c 'touch /reboot-required'
+Exec = /bin/sh -c 'touch /system-update'
