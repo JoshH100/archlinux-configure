@@ -5,7 +5,6 @@
     enabled: yes
   with_items:
     - sssd.service
-    - ntpd.service  
 
     
 - name: pacman updated

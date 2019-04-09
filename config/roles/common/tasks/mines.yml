@@ -35,11 +35,11 @@
 
     
 - name: Install mathematica license file
-  copy:
-    src: mathpass
-    dest: /opt/Mathematica/Configuration/Licensing/mathpass
+  block:
+    - file: path=/opt/Mathematica/Configuration/Licensing/ state=directory
+    - copy: src=mathpass dest=/opt/Mathematica/Configuration/Licensing/mathpass
   ignore_errors: yes
-  when: isgui|bool
+  when: islab|bool
 
 - name: Setup sudoers
   template:
