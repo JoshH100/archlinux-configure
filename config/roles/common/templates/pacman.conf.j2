@@ -72,13 +72,13 @@ LocalFileSigLevel = Optional
 
 [core]
 {% if pacserve.rc == 0 %}
-Include = /etc/pacman.d/pacserve
+#Include = /etc/pacman.d/pacserve
 {% endif %}
 Include = /etc/pacman.d/mirrorlist
 
 [extra]
 {% if pacserve.rc == 0 %}
-Include = /etc/pacman.d/pacserve
+#Include = /etc/pacman.d/pacserve
 {% endif %}
 Include = /etc/pacman.d/mirrorlist
 
@@ -87,7 +87,7 @@ Include = /etc/pacman.d/mirrorlist
 
 [community]
 {% if pacserve.rc == 0 %}
-Include = /etc/pacman.d/pacserve
+#Include = /etc/pacman.d/pacserve
 {% endif %}
 Include = /etc/pacman.d/mirrorlist
 
@@ -99,28 +99,28 @@ Include = /etc/pacman.d/mirrorlist
 
 [multilib]
 {% if pacserve.rc == 0 %}
-Include = /etc/pacman.d/pacserve
+#Include = /etc/pacman.d/pacserve
 {% endif %}
 Include = /etc/pacman.d/mirrorlist
 
 [mines2]
 SigLevel = Optional TrustAll
 {% if (pacserve.rc == 0) %}
-Include = /etc/pacman.d/pacserve
+#Include = /etc/pacman.d/pacserve
 {% endif %}
 Server = http://{{repos.mines2.server}}:15678/pacman/$repo/$arch
 
-[mines]
-SigLevel = Optional TrustAll
-{% if (pacserve.rc == 0) %}
-Include = /etc/pacman.d/pacserve
-{% endif %}
-Server = http://greyfox.mines.edu:15678/pacman/$repo/$arch
+#[mines]
+#SigLevel = Optional TrustAll
+#{% if (pacserve.rc == 0) %}
+#Include = /etc/pacman.d/pacserve
+#{% endif %}
+#Server = http://greyfox.mines.edu:15678/pacman/$repo/$arch
 
 [sublime-text]
 SigLevel = Optional TrustAll
 {% if (pacserve.rc == 0) %}
-Include = /etc/pacman.d/pacserve
+#Include = /etc/pacman.d/pacserve
 {% endif %}
 Server = https://download.sublimetext.com/arch/stable/x86_64
 

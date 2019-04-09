@@ -14,3 +14,4 @@ isserver: true
 sshd_allowed_groups: root ccitserveradmin ccitlabadmins
 mkinitcpio_modules: "vmw_balloon vmw_pvscsi vsock vmw_vsock_vmci_transport"
 services: vmtoolsd.service vmware-vmblock-fuse.service
+
