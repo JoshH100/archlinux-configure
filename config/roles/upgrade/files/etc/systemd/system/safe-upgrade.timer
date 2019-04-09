@@ -1,0 +1,8 @@
+[Unit]
+Description=Attempt installing updates
+
+[Timer]
+OnCalendar=*:0/15
+
+[Install]
+WantedBy=timers.target
