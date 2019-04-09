@@ -1,6 +1,6 @@
 ---
-- import_tasks: gpg.yml
-  tags: [gpg]
+#- import_tasks: gpg.yml
+#  tags: [gpg]
 - import_tasks: packages.yml
   tags: [packages]
 - import_tasks: ansible.yml
@@ -11,8 +11,8 @@
   tags: [locale]
   #- import_tasks: ldap.yml
   #  tags: [ldap]
-- import_tasks: software.yml
-  tags: [software]
+  #- import_tasks: software.yml
+  #tags: [software]
 - import_tasks: mines.yml
   tags: [mines]
 - import_tasks: mounts.yml

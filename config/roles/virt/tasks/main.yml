@@ -1,12 +1,9 @@
 - name: Install packages for libvirtd, qemu, and lxc
   pacman:
-      name: '{{ item }}'
+      name: "{{ libvirtd_packages  + lxc_packages  + qemu_packages }}"
       state: latest
       update_cache: yes
-  with_flattened:
-    - '{{ libvirtd_packages }}'
-    - '{{ lxc_packages }}'
-    - '{{ qemu_packages }}'
+      #  with_flattened:
   notify:
     - 'Restart libvirtd'
 

@@ -31,11 +31,10 @@
     dest: '{{ item.dest }}'
   with_items:
     - {src: 'lightdm', dest: '/etc/pam.d/lightdm'}
-    - {src: 'lightdm.conf', dest: '/etc/lightdm/lightdm.conf'}
-    - {src: 'client.conf', dest: '/etc/cups/client.conf'}
-  when: type == "lab"
+    #    - {src: 'lightdm.conf', dest: '/etc/lightdm/lightdm.conf'}
+  when: (type == "lab") and (isgui | bool)
 
-- name: configure pam, nsswitch, sshd
+- name: configure pam, nsswitch, sshd, cups
   copy:
     src: '{{ item.src }}'
     dest: '{{ item.dest }}'
@@ -48,6 +47,7 @@
     - {src: 'krb5.conf', dest: '/etc/krb5.conf'}  
     - {src: 'nobeep.conf', dest: '/etc/modprobe.d/nobeep.conf'}  
     - {src: 'waitnetwork.conf', dest: '/etc/systemd/system/sssd.service.d/'}
+    - {src: 'client.conf', dest: '/etc/cups/client.conf'}
 
 
 - name: configure krb5 and keytab

@@ -1,6 +1,6 @@
-- name: Install sensu-core
+- name: Install sensu
   pacman:
-    name: sensu
+    name: sensu-go-agent
     state: present
     update_cache: yes
 

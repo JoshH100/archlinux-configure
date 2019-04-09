@@ -17,7 +17,7 @@
     state: present
     opts: auto,x-systemd.automount,x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,fsc
   async: 20
-  when: isgui|bool
+  when: islab|bool
 
 - name: Mount files.mines.edu folders 
   mount:

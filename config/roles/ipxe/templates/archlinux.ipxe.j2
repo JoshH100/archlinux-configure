@@ -59,9 +59,9 @@ goto boot
 :boot
 echo Booting Arch Linux x86_64 ${release} from ${mirrorurl}
 echo
-kernel ${mirrorurl}/pxe/linux || goto failed_download
+kernel ${mirrorurl}/pxe/linux.signed || goto failed_download
 initrd ${mirrorurl}/pxe/initrd || goto failed_download
-imgargs linux initrd=initrd archiso_http_srv=${mirrorurl}pxe/ archisobasedir=fs verify=n ${extrabootoptions}
+imgargs linux.signed initrd=initrd archiso_http_srv=${mirrorurl}pxe/ archisobasedir=fs verify=n ${extrabootoptions}
 boot || goto failed_boot
 
 
