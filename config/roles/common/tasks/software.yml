@@ -2,7 +2,10 @@
   pacman:
     update_cache: yes
   ignore_errors: yes
- 
+
+- name: install lzop for lzop compressed packages
+  pacman: name=lzop state=present 
+
 - name: Remove software
   package:
       name: "{{ item }}"

@@ -1,0 +1,89 @@
+#!ipxe
+# vi: syntax=conf
+# Background :)
+#console --picture  {{ ipxe.ccit.backgroundurl }}
+# Figure out if client is 64-bit capable
+cpuid --ext 29 && set cpuarch x86_64 || set cpuarch i686
+
+# allow only trusted images
+imgtrust --allow
+
+# initial options
+set release {{ ipxe.release }}
+#set extrabootoptions ip=dhcp net.ifnames=0 BOOTIF=01-${netX/mac} modprobe.blacklist=nouveau   
+set extrabootoptions {{ ipxe.extrabootoptions }} 
+set countrycode {{ ipxe.countrycode }}
+
+
+:main
+menu {{ ipxe.menu.title }} ${release}
+item --gap Settings
+item --gap Architecture: x86_64
+item boot_ccit Boot CCIT ISO
+item set_options Boot options: ${extrabootoptions}
+item
+item shell Drop to iPXE shell
+item reboot Reboot
+item exit Exit iPXE
+isset ${mirrorurl} && choose --default set_options selected || choose --default set_mirror selected || goto shell
+goto ${selected} || goto main
+
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+goto main
+
+:reboot
+reboot
+
+:exit
+exit
+
+:enter_mirror_url
+set countrycode
+echo Enter the mirror URL including the trailing slash.
+echo Example: http://some.host/archlinux/
+echo
+echo -n Mirror URL: ${} && read mirrorurl || goto select_mirror_country
+goto main
+
+:set_options
+echo -n Boot options: ${} && read extrabootoptions ||
+goto main
+
+:boot_ccit
+set mirrorurl {{ ipxe.ccit.mirrorurl }} 
+set release ccit
+goto boot
+
+:boot
+echo Booting Arch Linux x86_64 ${release} from ${mirrorurl}
+echo
+kernel ${mirrorurl}/pxe/linux || goto failed_download
+initrd ${mirrorurl}/pxe/initrd || goto failed_download
+imgargs linux initrd=initrd archiso_http_srv=${mirrorurl}pxe/ archisobasedir=fs verify=n ${extrabootoptions}
+boot || goto failed_boot
+
+
+
+
+:failed_download
+echo
+echo Failed to download a file.
+goto failed
+
+:failed_verify
+echo
+echo Failed to verify a file.
+goto failed
+
+:failed_boot
+echo
+echo Boot failed.
+goto failed
+
+:failed
+echo Press a key to return to the menu.
+prompt
+imgfree
+goto main

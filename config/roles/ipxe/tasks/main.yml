@@ -1,0 +1,31 @@
+
+- name: create necessary paths (pxe and fs)
+  file: path="{{ item }}" state=directory mode=0755
+  with_items:
+    - "{{ ipxe.dest }}"
+    - "{{ ipxe.dest }}/fs/x86_64/"
+
+- name: update archinstall.tar.gz
+  block:
+    - file: path=/mnt/archinstall.tar.gz state=absent
+    - archive: path=/csm/mounts/files/CCIT/linux/images/arch/root/root/archinstall dest=/mnt/archinstall.tar.gz
+
+- name: debug loop
+  debug: msg="{{ item.value.src }} "
+  loop: "{{ ipxe.images.archlinux | dict2items }}"
+
+- name: copy linux, initrd, and rootfs to appropriate paths
+  copy: src="{{ item.value.src }}" dest="{{ ipxe.dest}}/{{ item.value.dest }}"
+  loop: "{{ ipxe.images.archlinux | dict2items }}"
+
+- name: copy archlinux.ipxe from template
+  template:
+    src: archlinux.ipxe.j2
+    dest: /mnt/archlinux.ipxe
+    
+- name: premessage for http server
+  debug: msg="starting HTTP server on port 3000"
+
+- name: start http server on port 3000 in /mnt/
+  shell: python -m http.server --directory /mnt/ 3000 
+

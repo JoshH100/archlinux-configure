@@ -1,0 +1,30 @@
+- name: Setup iPXE server 
+  hosts: localhost 
+  strategy: free
+  gather_facts: True
+  become: no 
+  vars:
+    ipxe:
+      dest: /mnt/pxe/
+      images:
+        archlinux:
+          linux:
+            src: archlinux/linux
+            dest: linux
+          initrd:
+            src: archlinux/initrd
+            dest: initrd
+          rootfs:
+            src: archlinux/airootfs.sfs
+            dest: fs/x86_64/airootfs.sfs 
+
+      release: 1
+      extrabootoptions: ip=dhcp net.ifnames=0 BOOTIF=01-${netX/mac} modprobe.blacklist=nouveau
+      countrycode: US
+      ccit:
+        mirrorurl: http://greyfox.mines.edu:3000/
+        backgroundurl: http://greyfox.mines.edu:3000/windows95.jpg
+      menu:
+        title: CCIT Archlinux Deployer
+  roles:
+    - {role: ipxe, tags: ['ipxe']}
