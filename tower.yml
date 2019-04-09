@@ -1,7 +1,0 @@
-- name: Additional config for AWX 
-  hosts: all
-  become: true
-  
-  tasks:
-    - name: create ansible user
-      user: name=ansible generate_ssh_key=true
