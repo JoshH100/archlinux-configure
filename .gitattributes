@@ -1,2 +1,0 @@
-initrd filter=lfs diff=lfs merge=lfs -text
-airootfs.sfs filter=lfs diff=lfs merge=lfs -text
