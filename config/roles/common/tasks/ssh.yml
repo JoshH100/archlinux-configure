@@ -18,3 +18,5 @@
     state: started
     enabled: yes
 
+- name: populate system known_hosts
+  copy: src=known_hosts dest=/etc/ssh/ssh_known_hosts

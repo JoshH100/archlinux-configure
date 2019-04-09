@@ -1,3 +1,8 @@
+- name: install requirements
+  pacman: name="{{ item }}" state=present update_cache=yes
+  loop:
+    - lzop
+
 - name: copy upgrade scripts and services
   copy:
     src: "{{ item.name }}"
@@ -15,20 +20,38 @@
   with_items:
     - 'schedule-reboot.timer'
     - 'schedule-reboot.path'
-    - 'download-updates.timer'  
+    - 'download-updates.timer'
+    - 'safe-upgrade.timer'
+    - 'pacman-keyring-update.timer'
+    - 'paccache.timer'
 
+# ansible has bug where 'provided' packages are seen as installed so need ignore_errors for now
 - name: Remove problematic and obsolete packages
   pacman:
-    name: '{{ remove_packages }}'
+    name: '{{ packages.remove }}'
     state: absent
+    force: true
   ignore_errors: true
+
+- name: update system
+  pacman:
+    upgrade: yes
+    update_cache: yes
+  register: updated
 
 - name: install_packages list present
   pacman:
-    name: "{{ install_packages }}"
+    name: "{{ packages.install }}"
     update_cache: yes
     state: present
-  become: yes
+
+# also have pacman hook... both methods have issues detecting every change to /boot
+# (kernel, nvidia, etc)
+#- name: Create /reboot-pending if kernel/driver has updated
+#  file: path=/reboot-pending state=touch
+#  when: updated.find('linux') != -1
+
+
 #  with_items: "{{ install_packages }}"
 
 

@@ -11,3 +11,5 @@ if [ -f {{s}} ]; then
 	source {{s}}
 fi
 {% endfor %}
+
+build="sudo -u aurutils aur build -f -d mines2 -s -- -s -d"

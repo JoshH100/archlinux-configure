@@ -1,12 +1,3 @@
-
-- name: Copy keys and pacman conf
-  copy:
-    src: '{{ item.src }}'
-    dest: '{{ item.dest }}'
-  with_items:
-    - {src: 'sublimehq-pub.gpg', dest: '/etc/pacman.d/'}
-  notify: Add and sign sublime key, and populate pacman keyring
-
 - name: Import sumblime key
   shell: "pacman-key -a /etc/pacman.d/sublimehq-pub.gpg &&  pacman-key --populate"
 
