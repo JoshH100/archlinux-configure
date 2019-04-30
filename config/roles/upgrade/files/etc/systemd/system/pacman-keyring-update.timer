@@ -2,7 +2,7 @@
 Description=Update pacman keyring once a day
 
 [Timer]
-OnCalendar=0:00:00
+OnCalendar=22:00:00
 
 [Install]
 WantedBy=timers.target

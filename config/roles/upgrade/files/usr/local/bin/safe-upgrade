@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Kick idle users
+/usr/local/bin/kickidle
+
 NUM_USERS=$(/usr/local/bin/listusers | wc -l)
 if [ $NUM_USERS -eq 0 ]
 then

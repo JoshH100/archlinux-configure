@@ -39,8 +39,8 @@
   #tags: [sensu]
 - import_tasks: notify.yml
   tags: [notify]
-- import_tasks: zdrive.yml
-  tags: [zdrive]
+- import_tasks: bin.yml
+  tags: [bin]
 - import_tasks: bootloader.yml
   tags: [bootloader]
 - import_tasks: command-configure.yml

@@ -23,7 +23,9 @@ X11Forwarding yes
 PrintMotd no # pam does that
 Subsystem	sftp	/usr/lib/ssh/sftp-server
 
-
+# Disconnect idle users 
+ClientAliveInterval 7200 # 120 minutes of idle (X11 forwarding counts as idle so give generous amounts of time)
+ClientAliveCountMax 0
 
 {% if not islab%}
 AllowGroups {{ sshd_allowed_groups }}

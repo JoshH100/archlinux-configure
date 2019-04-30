@@ -9,7 +9,6 @@
     dest: /etc/pacman.conf
   ignore_errors: yes
 
-
 - name: Create pacman.d hook folder
   file:
     path: /etc/pacman.d/hooks

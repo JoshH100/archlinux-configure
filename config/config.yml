@@ -37,3 +37,4 @@
     # upgrade (software install) takes the longest
     - {role: upgrade, tags: ['upgrade']}
     - {role: bios, tags: ['bios']}
+    - {role: secureboot, tags: ['secureboot']}
