@@ -7,6 +7,7 @@
     - avahi-daemon.service
     - org.cups.cupsd.service
     - lightdm.service
+    - sssd.service
     - systemd-timesyncd.service
 
       #- name: 'Enable PSD'

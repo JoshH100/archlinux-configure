@@ -28,9 +28,10 @@
   notify: enable services
   when: isgui |bool
 
+#TODO: move these to specific roles
 - name: install packages for ldap/kerboros, dell configure
   pacman:
-    name: openldap,nss-pam-ldapd,sssd, dell-command-configure, ufw
+    name: dell-command-configure, ufw
     state: present 
 
 - name: avahi

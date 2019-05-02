@@ -1,0 +1,15 @@
+- name: configure network
+  copy:
+    src: '{{ item }}'
+    dest: '/etc/systemd/network/'
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ network|flatten(levels=1) }}"
+  
+- name: resolv.conf
+  file:
+    src: /run/systemd/resolve/stub-resolv.conf
+    dest: /etc/resolv.conf
+    state: link
+    force: yes

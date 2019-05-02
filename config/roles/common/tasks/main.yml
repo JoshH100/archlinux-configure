@@ -1,6 +1,4 @@
 ---
-#- import_tasks: gpg.yml
-#  tags: [gpg]
 - import_tasks: packages.yml
   tags: [packages]
 - import_tasks: ansible.yml
@@ -9,8 +7,6 @@
   tags: [pacserve]
 - import_tasks: locale.yml
   tags: [locale]
-  #- import_tasks: software.yml
-  #tags: [software]
 - import_tasks: mines.yml
   tags: [mines]
 - import_tasks: mounts.yml
@@ -21,8 +17,6 @@
   tags: [motd]
 - import_tasks: bios.yml
   tags: [bios]
-  #- import_tasks: anaconda.yml
-  #  tags: [anaconda]
 - import_tasks: config.yml
   tags: [config]
 - import_tasks: services.yml
@@ -33,8 +27,6 @@
   tags: [fscache]
 - import_tasks: ssh.yml
   tags: [ssh]
-  #- import_tasks: sensu.yml
-  #tags: [sensu]
 - import_tasks: notify.yml
   tags: [notify]
 - import_tasks: bin.yml

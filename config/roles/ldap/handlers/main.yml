@@ -1,13 +1,8 @@
-- name: enable services
+- name: enable sssd
   service:
     name: "{{ item }}"
     state: started 
     enabled: yes
   with_items:
     - sssd.service
-
-    
-- name: pacman updated
-  set_fact:
-    pacman_old: "false"
-
+    - systemd-timesyncd

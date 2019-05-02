@@ -42,6 +42,8 @@
       sssd:
         config_src: sssd.conf.j2
         config_dst: /etc/sssd/sssd.conf
+    network:
+      - 25-wired.network
   pre_tasks:
     - pacman: update_cache=true
       register: pacman_updated
