@@ -9,8 +9,6 @@
   tags: [pacserve]
 - import_tasks: locale.yml
   tags: [locale]
-  #- import_tasks: ldap.yml
-  #  tags: [ldap]
   #- import_tasks: software.yml
   #tags: [software]
 - import_tasks: mines.yml

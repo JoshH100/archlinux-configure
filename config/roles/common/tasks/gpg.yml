@@ -1,8 +1,0 @@
-- name: Import sumblime key
-  shell: "pacman-key -a /etc/pacman.d/sublimehq-pub.gpg &&  pacman-key --populate"
-
-- name: Import pacman keys
-  shell: "pacman-key --recv {{ item }} && pacman-key --lsign {{ item }}"
-  with_items:
-        - "7448C890582975CD"
-  ignore_errors: yes

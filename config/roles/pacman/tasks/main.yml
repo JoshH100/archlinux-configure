@@ -1,0 +1,3 @@
+- include_tasks: gpg.yml
+  loop: "{{ pacmankeys|flatten(levels=1) }}"
+  tags: [pacmankey]

@@ -1,23 +1,24 @@
 - name: install packages for ldap/kerboros
   pacman:
-    name: openldap,nss-pam-ldapd,sssd, pam-krb5, pacserve
+    name: {{ ldap.packages }} 
     state: latest
 
 - name: configure MinesCerts for ldap
   copy:
-    src: MinesCerts
-    dest: /etc/MinesCerts
+    src: {{ ldap.tlscacert_src }}
+    dest: {{ ldap.tlscacert_dir }}
     owner: root
     group: root
     mode:  0644
 
 - name: configrure sssd
   template:
-    src: sssd.conf.j2
-    dest: /etc/sssd/sssd.conf
+    src: {{ ldap.sssd.Config_src }} 
+    dest: {{ ldap.sssd.Config_dst }} 
     mode: 0600
   notify: enable services
 
+# TODO: move this to DNS related config
 - name: resolv.conf
   file:
     src: /run/systemd/resolve/stub-resolv.conf

@@ -1,7 +1,7 @@
 [sssd]
 config_file_version = 2
 services = nss, pam
-domains = mines.edu 
+domains = {{ ldap.domains }}
 
 [domain/mines.edu]
 cache_credentials = true
@@ -9,20 +9,21 @@ cache_credentials = true
 id_provider = ldap
 auth_provider = krb5 
 
-ldap_uri = ldaps://ldap.mines.edu
-ldap_search_base = dc=mines,dc=edu
+ldap_uri = {{ ldap.uri }}
+ldap_search_base = {{ ldap.searchbase }}
 #ldap_id_use_start_tls = true
 ldap_tls_reqcert = demand
-ldap_tls_cacert = /etc/MinesCerts
-chpass_provider = krb5 
-ldap_chpass_uri = ldaps://ldap.mines.edu
+ldap_tls_cacert = {{ ldap.ldaptlscacert_dir }} 
+chpass_provider = krb5
+# chpass_uri is often just the ldap_uri 
+ldap_chpass_uri = {{ ldap.uri }} 
 entry_cache_timeout = 600
 ldap_network_timeout = 10
 ldap_group_member = memberUid 
 
-krb5_realm = MINES.EDU
+krb5_realm = {{ ldap.realm }} 
 krb5_ccname_template = FILE:%d/krb5cc_%U_XXXXXX
 krb5_auth_timeout = 15
-krb5_server = 138.67.138.105,138.67.138.106
+krb5_server = {{ ldap.krb5_server }} 
 krb5_lifetime = 1d
 #krb5_kpasswd

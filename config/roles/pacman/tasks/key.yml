@@ -1,0 +1,9 @@
+- name: check pacman key   
+  shell: "pacman-key --list-sigs {{ item.name }}"
+  register: keystate
+
+- name: Import and trust key
+  block:
+    - shell: "pacman-key --recv {{ item.name }}"
+    - shell: "pacman-key --lsign {{ item.name }}"
+  when: keystate.rc != 0
