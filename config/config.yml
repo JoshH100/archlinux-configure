@@ -3,6 +3,9 @@
   strategy: free
   gather_facts: True
   vars:
+    lightdm:
+      session-wrapper: /etc/lightdm/Xsession
+      session-cleanup: /etc/lightdm/Xcleanup
     isdell: true
     sensu:
       rabbitmq:

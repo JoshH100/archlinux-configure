@@ -1,0 +1,14 @@
+- name: install lightdm login manager
+  pacman:
+      name: lightdm, lightdm-gtk-greeter, xorg-server
+      state: present
+      update_cache: yes
+  when: isgui |bool
+
+- name: Configure lightdm config 
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  notify: enable lightdm
+  with_items:
+    - {src: 'lightdm.conf.j2', dest: '/etc/lightdm/lightdm.conf' }
