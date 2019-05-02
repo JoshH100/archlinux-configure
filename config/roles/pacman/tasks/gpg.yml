@@ -3,14 +3,16 @@
   register: pacmankeyring
 
 - name: Populate pacman keyring
-  shell: "pacman-key --populate"
-  when: pacmankeyring.stat.islnk is not defined
+  block:
+    - shell: "pacman-key --init"
+    - shell: "pacman-key --populate"
+  when: pacmankeyring.stat.exists != true
 
 # Attempt to use signing name as destination name
 - name: Fetch, import, and trust sumblime key
   block:
     - get_url: url="{{ item.src }}" dest="/etc/pacman.d/{{ item.name }}"
-    - shell: "pacman-key -a /etc/pacman.d/{{ item.name }}"
+    - shell: "pacman-key --add /etc/pacman.d/{{ item.name }}"
     - shell: "pacman-key --lsign-key {{ item.name }}"
   when: item.src is defined
 

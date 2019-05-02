@@ -1,20 +1,20 @@
 - name: install packages for ldap/kerboros
   pacman:
-    name: {{ ldap.packages }} 
+    name: "{{ ldap.packages }}"
     state: latest
 
 - name: configure MinesCerts for ldap
   copy:
-    src: {{ ldap.tlscacert_src }}
-    dest: {{ ldap.tlscacert_dir }}
+    src: "{{ ldap.tlscacert_src }}"
+    dest: "{{ ldap.tlscacert_dir }}"
     owner: root
     group: root
     mode:  0644
 
 - name: configrure sssd
   template:
-    src: {{ ldap.sssd.Config_src }} 
-    dest: {{ ldap.sssd.Config_dst }} 
+    src: "{{ ldap.sssd.config_src }}"
+    dest: "{{ ldap.sssd.config_dst }}" 
     mode: 0600
   notify: enable services
 
@@ -28,8 +28,8 @@
 
 - name: copy lab specific config files
   copy:
-    src: '{{ item.src }}'
-    dest: '{{ item.dest }}'
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
   with_items:
     - {src: 'lightdm', dest: '/etc/pam.d/lightdm'}
     #    - {src: 'lightdm.conf', dest: '/etc/lightdm/lightdm.conf'}

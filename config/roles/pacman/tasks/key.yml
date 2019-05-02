@@ -1,5 +1,6 @@
 - name: check pacman key   
   shell: "pacman-key --list-sigs {{ item.name }}"
+  ignore_errors: true
   register: keystate
 
 - name: Import and trust key
