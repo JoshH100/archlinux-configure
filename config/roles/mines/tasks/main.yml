@@ -1,0 +1,10 @@
+- name: Install background logo png
+  copy:
+    src: mineslogo.png
+    dest: /usr/share/pixmaps/mineslogo.png
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - enable services
+  when: isgui|bool

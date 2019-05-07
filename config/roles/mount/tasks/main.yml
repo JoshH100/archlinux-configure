@@ -1,0 +1,26 @@
+---
+- name: copy idmapd.conf
+  template:
+    src: idmapd.conf.j2
+    dest: /etc/idmapd.conf
+
+- name: Install packages for nfs
+  pacman:
+    name: nfs-utils
+    state: latest
+
+- name: load NFS module at boot
+  lineinfile:
+    create: yes
+    state: present
+    path: /etc/modules-load.d/modules.conf
+    insertafter: EOF
+    line: nfs
+
+- name: Enable systemd-networkd-wait-online.service
+  service:
+    name: systemd-networkd-wait-online.service
+    enabled: true
+
+- name: Setup mounts using systemd
+  include_role: name=ypsman.systemd_mounts 

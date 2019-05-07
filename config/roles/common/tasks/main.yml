@@ -1,16 +1,6 @@
 ---
-- import_tasks: packages.yml
-  tags: [packages]
-- import_tasks: ansible.yml
-  tags: [ansible]
-- import_tasks: pacserve.yml
-  tags: [pacserve]
-- import_tasks: locale.yml
-  tags: [locale]
 - import_tasks: mines.yml
   tags: [mines]
-- import_tasks: mounts.yml
-  tags: [mounts]
 - import_tasks: video.yml
   tags: [video]
 - import_tasks: motd.yml
@@ -25,8 +15,6 @@
   tags: [security]
 - import_tasks: fscache.yml
   tags: [fscache]
-- import_tasks: ssh.yml
-  tags: [ssh]
 - import_tasks: notify.yml
   tags: [notify]
 - import_tasks: bin.yml

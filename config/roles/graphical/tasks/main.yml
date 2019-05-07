@@ -12,3 +12,4 @@
   notify: enable lightdm
   with_items:
     - {src: 'lightdm.conf.j2', dest: '/etc/lightdm/lightdm.conf' }
+    - {src: 'lightdm-gtk-greeter.conf.j2', dest: '/etc/lightdm/lightdm-gtk-greeter.conf' }

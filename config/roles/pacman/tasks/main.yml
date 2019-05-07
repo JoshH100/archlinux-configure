@@ -1,3 +1,55 @@
 - include_tasks: gpg.yml
   loop: "{{ pacmankeys|flatten(levels=1) }}"
   tags: [pacmankey]
+  
+- name: Setup initial pacman.conf
+  template:
+    src: pacman.conf.j2
+    dest: /etc/pacman.conf
+  ignore_errors: yes
+
+- name: Create pacman.d hook folder
+  file:
+    path: /etc/pacman.d/hooks
+    state: directory
+    owner: root
+    
+- name: Setup paccache hook
+  copy:
+    src: paccache.hook
+    dest: /etc/pacman.d/hooks/paccache.hook
+
+# Pacserve
+- import_tasks: pacserve.yml
+  tags: [pacserve]
+
+# Not sure where to put this stuff
+# ------------------------------
+
+- name: Test if pacserve is installed
+  command: pacman -Qs pacserve
+  register: pacserve
+  ignore_errors: yes
+
+#TODO: move these to specific roles
+- name: install packages for ldap/kerboros, dell configure
+  pacman:
+    name: dell-command-configure, ufw
+    state: present 
+
+- name: avahi
+  pacman:
+    name: avahi, nss-mdns
+    state: present
+  notify: enable services
+  when: isgui|bool
+
+- name: printing support
+  pacman:
+    name: cups, gtk3 cups-pdf
+    state: present
+  notify: enable services
+
+- name: enable and (re)start services
+  command: echo
+  notify: enable services

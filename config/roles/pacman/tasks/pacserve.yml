@@ -15,6 +15,7 @@
 - name: print pacserve
   debug: msg="{{pacserve}}"
 
+# can this be replaced by calling this role
 - name: Add pacserve to pacman.conf
   template:
     src: pacman.conf.j2

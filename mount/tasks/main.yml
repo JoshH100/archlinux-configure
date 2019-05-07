@@ -1,0 +1,4 @@
+  include_role:
+    name: ypsman.systemd_mounts
+  vars:
+    mounts:

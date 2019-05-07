@@ -1,0 +1,8 @@
+# TODO: update this to loop arround a list
+# move to SSH role and then import role
+- name: Required roles for Ansible
+  include_role: name=ssh
+  vars:
+    user: "{{ ssh.root.user }}"
+    sshkeys: "{{ ssh.root.sshkeys }}"
+

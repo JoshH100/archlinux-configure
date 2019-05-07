@@ -1,0 +1,26 @@
+- name: set locale(s)
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ system.locales }}"
+
+
+# users & security
+
+- name: Setup sudoers
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%sudo'
+    line: '%sudo ALL=(ALL) ALL'
+    validate: '/usr/bin/visudo -cf %s'
+
+- name: Setup sudo groups
+  lineinfile:
+    path: /etc/sudoers.d/{{ brand.short }}
+    state: present
+    create: yes
+    insertafter: EOF
+    line: '%{{item}} ALL=(ALL:ALL) ALL'
+    validate: '/usr/bin/visudo -cf %s'
+  loop: "{{ sudo.groups }}"

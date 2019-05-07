@@ -1,7 +1,0 @@
-- name: Copy authorized keys to root account
-  authorized_key:
-    user: root
-    state: present
-    key: "{{ lookup('file', item.src) }}"
-  with_filetree: sshkeys/
-  when: item.state == 'file'
