@@ -41,14 +41,3 @@
   ignore_errors: yes
   when: islab|bool
 
-- name: Setup sudoers
-  template:
-        src: sudoers
-        dest: /etc/sudoers
-  ignore_errors: yes
-
-- name: Setup sudo groups
-  template:
-        src: csm
-        dest: /etc/sudoers.d/csm
-  ignore_errors: yes

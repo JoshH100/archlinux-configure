@@ -3,6 +3,16 @@
   strategy: free
   gather_facts: True
   vars:
+    cups:
+      servername: cups.mines.edu
+    pacman:
+      repos:
+        mines2:
+          name: mines2
+          server: 'http://labbuild-test1.mines.edu:15678/pacman/$repo/$arch'
+        sublime-text:
+          name: sublime-text
+          server: 'https://download.sublimetext.com/arch/stable/x86_64'
     brand:
       short: csm
     system:
@@ -30,7 +40,6 @@
     type: lab
     repos:
       mines2:
-        server: labbuild-test1.mines.edu
     sudo:
       groups:
         - ccitlabadmins
@@ -42,6 +51,14 @@
       - {name: "7448C890582975CD" }
     nfs:
       domain: mines.edu
+    kerberos:
+      realm: mines.edu
+      admin_server: 138.67.138.105
+      kdc:
+        - 138.67.138.105
+        - 138.67.138.106
+        - 138.67.138.114
+
     ldap:
       packages:
         - openldap
@@ -55,9 +72,6 @@
       tlscacert_dir: "/etc/MinesCerts"
       realm: "MINES.EDU"
       krb5_server: "138.67.138.105,138.67.138.106"
-      sssd:
-        config_src: sssd.conf.j2
-        config_dst: /etc/sssd/sssd.conf
     network:
       - 25-wired.network
     mounts:

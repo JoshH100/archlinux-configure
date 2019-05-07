@@ -103,24 +103,12 @@ Include = /etc/pacman.d/mirrorlist
 {% endif %}
 Include = /etc/pacman.d/mirrorlist
 
-[mines2]
+
+{% for repo in pacman.repos %}
+[{{ repo.name }}]
 SigLevel = Optional TrustAll
 {% if (pacserve.rc == 0) %}
 #Include = /etc/pacman.d/pacserve
 {% endif %}
-Server = http://{{repos.mines2.server}}:15678/pacman/$repo/$arch
-
-#[mines]
-#SigLevel = Optional TrustAll
-#{% if (pacserve.rc == 0) %}
-#Include = /etc/pacman.d/pacserve
-#{% endif %}
-#Server = http://greyfox.mines.edu:15678/pacman/$repo/$arch
-
-[sublime-text]
-SigLevel = Optional TrustAll
-{% if (pacserve.rc == 0) %}
-#Include = /etc/pacman.d/pacserve
-{% endif %}
-Server = https://download.sublimetext.com/arch/stable/x86_64
-
+Server = http://{{repo.server}}:15678/pacman/$repo/$arch
+{% endfor %}

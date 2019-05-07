@@ -31,20 +31,22 @@
   with_items:
     - {src: 'nsswitch.conf', dest: '/etc/nsswitch.conf'}
     - {src: 'system-auth', dest: '/etc/pam.d/system-auth'}
-    - {src: 'ldap.conf', dest: '/etc/openldap/ldap.conf'}
     - {src: 'sssd.service', dest: '/etc/systemd/system/'}
     - {src: 'nscd.conf', dest: '/etc/nscd.conf'}
     - {src: 'passwd', dest: '/etc/pam.d/passwd'}
-    - {src: 'krb5.conf', dest: '/etc/krb5.conf'}  
     - {src: 'nobeep.conf', dest: '/etc/modprobe.d/nobeep.conf'} #MOVE 
     - {src: 'waitnetwork.conf', dest: '/etc/systemd/system/sssd.service.d/'}
     - {src: 'client.conf', dest: '/etc/cups/client.conf'} #MOVE
 
-- name: configrure sssd
+- name: configrure sssd, krb5
   template:
-    src: "{{ ldap.sssd.config_src }}"
-    dest: "{{ ldap.sssd.config_dst }}" 
+    src: '{{ item.src }}' 
+    dest: '{{ item.dest }}' 
     mode: 0600
+  with_items:
+    - {src: 'ldap.conf.j2', dest: '/etc/openldap/ldap.conf' } 
+    - {src: 'sssd.conf.j2', dest: '/etc/sssd/sssd.conf' } 
+    - {src: 'krb5.conf.j2', dest: '/etc/krb5.conf'}  
   notify: enable sssd
 
 - name: configure krb5 and keytab
