@@ -3,6 +3,10 @@
   strategy: free
   gather_facts: True
   vars:
+    pacserve:
+      # enable use of this flag
+      enabled: false
+      args: --multicast --peer http://greyfox.mines.edu:15678
     cups:
       servername: cups.mines.edu
     pacman:
