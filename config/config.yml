@@ -3,6 +3,13 @@
   strategy: free
   gather_facts: True
   vars:
+    # label what kind of license servers these are
+    license:
+      servers:
+        - license.mines.edu
+        - enable.mines.edu
+        - entitle.mines.edu
+        - entrust.mines.edu
     pacserve:
       # enable use of this flag
       enabled: false
@@ -10,13 +17,20 @@
     cups:
       servername: cups.mines.edu
     pacman:
+      options:
+        - UseSyslog
+        - Color
+        - TotalDownload
+        - CheckSpace
+        - UseDelta
+      preserved_configs:
+        - "etc/ssh/sshd_config"
+        - "etc/systemd/logind.conf"
       repos:
-        mines2:
-          name: mines2
-          server: 'http://labbuild-test1.mines.edu:15678/pacman/$repo/$arch'
-        sublime-text:
-          name: sublime-text
-          server: 'https://download.sublimetext.com/arch/stable/x86_64'
+          - {name: mines2, server: 'http://labbuild-test1.mines.edu:15678/pacman/$repo/$arch' }
+          - {name: sublime-text, server: 'https://download.sublimetext.com/arch/stable/x86_64' }
+      mirrors:
+        - 'https://lug.mines.edu/mirrors/archlinux/$repo/os/$arch'
     brand:
       short: csm
     system:
@@ -77,7 +91,9 @@
       realm: "MINES.EDU"
       krb5_server: "138.67.138.105,138.67.138.106"
     network:
-      - 25-wired.network
+      domains: adit.mines.edu mines.edu
+      config:
+        - 25-wired.network
     mounts:
       home:
         share: files.mines.edu:/export/fermat

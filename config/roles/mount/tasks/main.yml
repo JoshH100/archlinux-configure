@@ -24,3 +24,7 @@
 
 - name: Setup mounts using systemd
   include_role: name=ypsman.systemd_mounts 
+
+- name: enable fscache
+  import_tasks: fscache.yml
+  tags: [fscache]

@@ -9,7 +9,7 @@
 
 - name: check pacserve installed
   shell: pacman -Q pacserve
-  register: pacserve
+  register: pac_pacserve
   tags: pacmantemp
 
 - name: print pacserve

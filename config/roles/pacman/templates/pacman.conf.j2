@@ -71,24 +71,27 @@ LocalFileSigLevel = Optional
 #Include = /etc/pacman.d/mirrorlist
 
 [core]
-{% if pacserve.rc == 0 %}
+{% if pac_pacserve.rc == 0 %}
 #Include = /etc/pacman.d/pacserve
 {% endif %}
+Include = /etc/pacman.d/mirrors.conf
 Include = /etc/pacman.d/mirrorlist
 
 [extra]
-{% if pacserve.rc == 0 %}
+{% if pac_pacserve.rc == 0 %}
 #Include = /etc/pacman.d/pacserve
 {% endif %}
+Include = /etc/pacman.d/mirrors.conf
 Include = /etc/pacman.d/mirrorlist
 
 #[community-testing]
 #Include = /etc/pacman.d/mirrorlist
 
 [community]
-{% if pacserve.rc == 0 %}
+{% if pac_pacserve.rc == 0 %}
 #Include = /etc/pacman.d/pacserve
 {% endif %}
+Include = /etc/pacman.d/mirrors.conf
 Include = /etc/pacman.d/mirrorlist
 
 # If you want to run 32 bit applications on your x86_64 system,
@@ -98,17 +101,18 @@ Include = /etc/pacman.d/mirrorlist
 #Include = /etc/pacman.d/mirrorlist
 
 [multilib]
-{% if pacserve.rc == 0 %}
+{% if pac_pacserve.rc == 0 %}
 #Include = /etc/pacman.d/pacserve
 {% endif %}
+Include = /etc/pacman.d/mirrors.conf
 Include = /etc/pacman.d/mirrorlist
 
 
 {% for repo in pacman.repos %}
 [{{ repo.name }}]
 SigLevel = Optional TrustAll
-{% if (pacserve.rc == 0) and pacserve.enabled %}
-#Include = /etc/pacman.d/pacserve
+{% if (pac_pacserve.rc == 0) and pacserve.enabled %}
+Include = /etc/pacman.d/pacserve
 {% endif %}
-Server = http://{{repo.server}}:15678/pacman/$repo/$arch
+Server = {{repo.server}}
 {% endfor %}

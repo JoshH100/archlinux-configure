@@ -1,3 +1,13 @@
+# Pacserve
+- name: deploy mirrors.conf
+  template:
+    src: mirrors.conf.j2
+    dest: /etc/pacman.d/mirrors.conf
+
+  # update pacman.conf template to only include existing /etc/pacman.d/* conf files
+- import_tasks: pacserve.yml
+  tags: [pacserve]
+
 - include_tasks: gpg.yml
   loop: "{{ pacmankeys|flatten(levels=1) }}"
   tags: [pacmankey]
@@ -19,17 +29,9 @@
     src: paccache.hook
     dest: /etc/pacman.d/hooks/paccache.hook
 
-# Pacserve
-- import_tasks: pacserve.yml
-  tags: [pacserve]
 
 # Not sure where to put this stuff
 # ------------------------------
-
-- name: Test if pacserve is installed
-  command: pacman -Qs pacserve
-  register: pacserve
-  ignore_errors: yes
 
 #TODO: move these to specific roles
 - name: install packages for ldap/kerboros, dell configure

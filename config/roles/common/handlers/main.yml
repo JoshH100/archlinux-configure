@@ -12,13 +12,13 @@
       #- name: 'Enable PSD'
       #  command: systemctl --global disable psd.service
       #  ignore_errors: yes
-    
+
+# should create this directroy or check if mathematica is installed
 - name: Configure mathematica license servers
-  copy:
-    src: mathpass
+  template:
+    src: mathpass.j2
     dest: /opt/Mathematica/Configuration/Licensing/mathpass
     mode: 0755
-  ignore_errors: true
 
 - name: pacman updated
   set_fact:

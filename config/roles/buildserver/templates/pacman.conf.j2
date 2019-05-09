@@ -5,32 +5,39 @@ Architecture = auto
 CacheDir = /var/cache/pacman/pkg
 CacheDir = {{ build.repo.dest}}
 
-UseSyslog
-Color
-TotalDownload
-CheckSpace
+# Misc options
+{% for option in pacman.options %}
+{{ option }}
+{% endfor %}
+
 SigLevel    = Required DatabaseOptional
 LocalFileSigLevel = Optional
 
 [core]
-Include = /etc/pacman.d/lug.conf
+Include = /etc/pacman.d/mirrors.conf
 Include = /etc/pacman.d/mirrorlist
 
 [extra]
-Include = /etc/pacman.d/lug.conf
+Include = /etc/pacman.d/mirrors.conf
 Include = /etc/pacman.d/mirrorlist
 
 [community]
-Include = /etc/pacman.d/lug.conf
+Include = /etc/pacman.d/mirrors.conf
 Include = /etc/pacman.d/mirrorlist
 
 [multilib]
-Include = /etc/pacman.d/lug.conf
+Include = /etc/pacman.d/mirrors.conf
 Include = /etc/pacman.d/mirrorlist
 
-[mines]
+
+{% for repo in pacman.repos %}
+[{{ repo.name }}]
 SigLevel = Optional TrustAll
-Server = http://greyfox.mines.edu:15678/pacman/$repo/$arch
+{% if (pacserve.rc == 0) and pacserve.enabled %}
+Include = /etc/pacman.d/pacserve
+{% endif %}
+Server = {{repo.server}}
+{% endfor %}
 
 
 [{{ build.repo.name }}]

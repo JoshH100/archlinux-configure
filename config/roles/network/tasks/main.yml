@@ -5,9 +5,9 @@
     owner: root
     group: root
     mode: 0644
-  loop: "{{ network|flatten(levels=1) }}"
+  loop: "{{ network.config |flatten(levels=1) }}"
   
-- name: resolv.conf
+- name: setup systemd based resolv.conf
   file:
     src: /run/systemd/resolve/stub-resolv.conf
     dest: /etc/resolv.conf
