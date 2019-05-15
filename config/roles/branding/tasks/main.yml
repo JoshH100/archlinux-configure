@@ -1,7 +1,7 @@
 - name: Install background logo png
   copy:
-    src: mineslogo.png
-    dest: /usr/share/pixmaps/mineslogo.png
+    src: background.png
+    dest: /usr/share/pixmaps/background.png
     owner: root
     group: root
     mode: 0644

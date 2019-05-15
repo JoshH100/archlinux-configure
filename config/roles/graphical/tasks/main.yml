@@ -1,3 +1,7 @@
+- name: require branding role
+  block:
+    - include_role: name=branding
+
 - name: install lightdm login manager
   pacman:
       name: lightdm, lightdm-gtk-greeter, xorg-server
