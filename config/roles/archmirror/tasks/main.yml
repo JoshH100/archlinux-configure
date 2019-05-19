@@ -5,8 +5,7 @@
   template: src=samba_creds.j2 dest={{ cifs.creds.dest }} mode="u+rwx,g-rwx,o-rwx"
 
 - name: create mount for mirror(s)
-  include_role:
-    name: ypsman.systemd_mounts
+  include_role: name=ypsman.systemd_mounts
   vars:
     mounts:
       mirror:
@@ -17,8 +16,7 @@
             automount: true 
 
 - name: create basic vhost for mirror
-  include_role:
-    name: robertdebock.httpd
+  include_role: name=robertdebock.httpd
   vars:
     httpd_vhosts:
       - name: archlinux_mirror
