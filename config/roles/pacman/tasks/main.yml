@@ -1,8 +1,8 @@
 # Pacserve
-- name: deploy mirrors.conf
-  template:
-    src: mirrors.conf.j2
-    dest: /etc/pacman.d/mirrors.conf
+- name: deploy mirrors.conf and mirrorlist
+  block:
+    - template: src=mirrors.conf.j2 dest=/etc/pacman.d/mirrors.conf
+    - copy: src=mirrorlist dest=/etc/pacman.d/mirrorlist
 
   # update pacman.conf template to only include existing /etc/pacman.d/* conf files
 - import_tasks: pacserve.yml

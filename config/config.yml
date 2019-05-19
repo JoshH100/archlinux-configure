@@ -17,6 +17,12 @@
     cups:
       servername: cups.mines.edu
     pacman:
+      canary_hosts:
+        - bb136-01
+        - bb136-23
+        - ck182-34
+        - ch275l-07
+        - grla110-28
       options:
         - UseSyslog
         - Color
@@ -36,7 +42,7 @@
     system:
       locales:
         - en_US.UTF-8
-        - en_DK.UTF-8
+        - en_DK.UTF-8 # en_DK for real l88t users respecing iso8601
     ssh:
       root:
         sshkeys: rootkeys
@@ -94,6 +100,17 @@
       domains: adit.mines.edu mines.edu
       config:
         - 25-wired.network
+      smb_share:
+        name: zdrive
+        domain: ADIT
+        path: "hornet-ct.mines.edu/Users/${USER:0:1}/${USER}"
+        share: users
+        src: '$XDG_RUNTIME_DIR/gvfs/smb-share:domain=ADIT,server=hornet-ct.mines.edu,share=users,user=${USER}/${USER:0:1}/${USER}'
+        dst: "$HOME/zdrive"
+        inst: /usr/local/bin/zdrive
+        desktop_entry:
+          comment: Mount ADIT Z Drive
+          categories: "GNOME;GTK;Utility;Core;Mines"
     mounts:
       home:
         share: files.mines.edu:/export/fermat

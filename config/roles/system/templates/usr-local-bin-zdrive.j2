@@ -1,0 +1,10 @@
+#!/bin/zsh
+FOLDER="{{ network.smb_share.dst }}"
+
+if [ -h $FOLDER -a ! -e $FOLDER ]; then
+	rm $FOLDER
+fi
+
+# For some reason this works if we pass in a fake/temp password
+/usr/bin/gio mount "smb://{{network.smb_share.domain }};${USER}:test\@{{ network.smb_share.path }}"
+ln -s {{ network.smb_share.src }} "$FOLDER"

@@ -5,8 +5,7 @@
   loop: "{{ system.locales }}"
 
 
-# users & security
-
+  #Users & security
 - name: Setup sudoers
   lineinfile:
     path: /etc/sudoers
@@ -24,3 +23,14 @@
     line: '%{{item}} ALL=(ALL:ALL) ALL'
     validate: '/usr/bin/visudo -cf %s'
   loop: "{{ sudo.groups }}"
+
+
+  #TODO: cleanup / use loops - move maybe?
+  #TODO: create generic role for desktop entries
+- name: Setup usr/local/bin
+  block:
+    copy: src=usr dest=/
+    template: src=usr-local-bin-zdrive.j2 dest=/usr/local/bin/zdrive mode=0766
+    template: src=entry.desktop.j2 dest=/usr/share/applications/zdrive.desktop
+
+

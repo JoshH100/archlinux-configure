@@ -14,11 +14,19 @@
       #  ignore_errors: yes
 
 # should create this directroy or check if mathematica is installed
+# move to software/licensing(?) role
 - name: Configure mathematica license servers
   template:
     src: mathpass.j2
     dest: /opt/Mathematica/Configuration/Licensing/mathpass
     mode: 0755
+
+- name: Install mathematica license file
+  block:
+    - file: path=/opt/Mathematica/Configuration/Licensing/ state=directory
+    - copy: src=mathpass dest=/opt/Mathematica/Configuration/Licensing/mathpass
+  ignore_errors: yes
+  when: islab|bool
 
 - name: pacman updated
   set_fact:

@@ -3,7 +3,8 @@ import subprocess
 import time
 import datetime
 from dateutil import parser
-from systemd import login
+import psutil
+import sys
 
 MINUID=900
 
@@ -24,7 +25,10 @@ if __name__ == '__main__':
             key = varvalue[0]
             value = varvalue[1]
             users[k][key] = value
-   
+
+    for k,v in users.items():
+        v['numProcs'] = 0
+        v['numProcs'] = len([p.info for p in psutil.process_iter(attrs=['pid', 'username']) if v['Name'] in p.info['username']])
 
     for k,v in users.items():
         if int(k) > MINUID:
@@ -32,9 +36,13 @@ if __name__ == '__main__':
             if int(v['IdleSinceHint']) == 0:
                 start = parser.parse(v['Timestamp']).timestamp()
                 timeIdle = int(int(time.time()) - start)
-            durationIdle = str(datetime.timedelta(seconds=timeIdle))
+            if len(sys.argv) > 1:
+                if v['numProcs'] <= int(sys.argv[1]):
+                    subprocess.Popen(["/usr/bin/loginctl", "terminate-user", v['Name']])
+                    v['State'] = 'Terminated'
+            v['durationIdle'] = str(datetime.timedelta(seconds=timeIdle))
             if "y" in v['IdleHint']:
-                print('{:^15} {:^15} {:<15}'.format(v['Name'],v['State'],durationIdle))
+                print('{:^15} {:^15} {:<15} {:^15}'.format(v['Name'], v['State'], v['durationIdle'], v['numProcs']))
             else:
-                print('{:^15} {:^15} {:<15}'.format(v['Name'],v['State'],"Not Idle"))
+                print('{:^15} {:^15} {:<15} {:^15}'.format(v['Name'], v['State'], "Not Idle", v['numProcs']))
 

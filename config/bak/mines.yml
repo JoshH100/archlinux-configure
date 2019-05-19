@@ -1,24 +1,3 @@
----
-- name: Install mines logo png
-  copy:
-    src: mineslogo.png
-    dest: /usr/share/pixmaps/mineslogo.png
-    owner: root
-    group: root
-    mode: 0644
-  notify:
-    - enable services
-  when: isgui|bool
-
-- name: lightdm session fix script
-  copy:
-    src: Xcleanup
-    dest: /etc/lightdm/Xcleanup
-    owner: root
-    group: root
-    mode: 0755
-  when: isgui|bool
-
 - name: Set lightdm config files
   copy:
     src: '{{ item.src }}'

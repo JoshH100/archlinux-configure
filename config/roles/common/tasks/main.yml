@@ -1,6 +1,4 @@
 ---
-#- import_tasks: mines.yml
-#  tags: [mines]
 - import_tasks: video.yml
   tags: [video]
   #- import_tasks: motd.yml
