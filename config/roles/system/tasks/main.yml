@@ -29,8 +29,8 @@
   #TODO: create generic role for desktop entries
 - name: Setup usr/local/bin
   block:
-    copy: src=usr dest=/
-    template: src=usr-local-bin-zdrive.j2 dest=/usr/local/bin/zdrive mode=0766
-    template: src=entry.desktop.j2 dest=/usr/share/applications/zdrive.desktop
+    - copy: src=usr dest=/
+    - template: src=usr-local-bin-zdrive.j2 dest=/usr/local/bin/zdrive mode=0766
+    - template: src=entry.desktop.j2 dest=/usr/share/applications/zdrive.desktop
 
 
