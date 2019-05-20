@@ -3,6 +3,10 @@
   strategy: free
   gather_facts: True
   vars:
+    software_remove:
+      - jre7-openjdk
+      - jre7-openjdk-headless
+      - vim
     # label what kind of license servers these are
     license:
       servers:
@@ -56,6 +60,8 @@
     lightdm:
       session-wrapper: /etc/lightdm/Xsession
       session-cleanup: /etc/lightdm/Xcleanup
+    ansible:
+      userprofile: "ansible-playbook /usr/share/mines-playbooks/archlinux-userprofile/userprofile.yml >> /tmp/ansible.log"
     isdell: true
     sensu:
       rabbitmq:
@@ -65,6 +71,14 @@
     zsh:
       theme: clint
       term: linux
+      sources:
+        - "/usr/share/doc/pkgfile/command-not-found.zsh"
+        - "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+        - "{{ zsh.build.functions.dest }}" # this probably won't work
+      build:
+        functions:
+          src: buildfunctions.j2
+          dest: /etc/zsh/buildfunctions
     contact_email: jhoffer@mines.edu
     mines_repo_host: greyfox.mines.edu:15678
     type: lab
@@ -147,8 +161,6 @@
     - {role: sensu , tags: ['sensu']}
     - {role: ldap, tags: ['ldap']}
     - {role: ansible, tags: ['ansible']}
-    #- {role: virt, tags: ['virt']}
-    - {role: ipfs, tags: ['ipfs']}
     - {role: root, tags: ['root']}
     # upgrade (software install) takes the longest
     - {role: upgrade, tags: ['upgrade']}

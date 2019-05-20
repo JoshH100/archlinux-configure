@@ -1,4 +1,5 @@
 ---
+#TODO: move to other roles...
 - name: config files 
   copy:
     src: '{{ item.src }}'
@@ -20,7 +21,7 @@
     enabled: yes
 
 - name: Enable ansible userprofile playbook at login
-  lineinfile: state=present line="ansible-playbook /usr/share/mines-playbooks/archlinux-userprofile/userprofile.yml >> /tmp/ansible.log" insertbefore="^# Run user xsession shell script" path=/etc/lightdm/Xsession
+  lineinfile: state=present line={{ ansible.userprofile }}  insertbefore="^# Run user xsession shell script" path=/etc/lightdm/Xsession
   when: (isgui|bool)
 
 # TODO: create /etc/samba folder first - testing now

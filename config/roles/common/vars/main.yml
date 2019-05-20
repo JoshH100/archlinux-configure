@@ -1,5 +1,0 @@
-# set vi:syntax=yaml
-software_remove:
-  - jre7-openjdk
-  - jre7-openjdk-headless
-  - vim

@@ -7,7 +7,7 @@
     name: "{{ ldap.packages }}"
     state: latest
 
-- name: configure MinesCerts for ldap
+- name: configure certs for ldap
   copy:
     src: "{{ ldap.tlscacert_src }}"
     dest: "{{ ldap.tlscacert_dir }}"
