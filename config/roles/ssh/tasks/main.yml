@@ -3,9 +3,12 @@
   authorized_key:
     user: "{{ user }}" 
     state: present
-    key: "{{ lookup('file', item.src) }}"
-  with_filetree: "{{ sshkeys }}"
-  when: item.state == 'file'
+    key: item
+  loop: ssh.root.keys
+  
+#    key: "{{ lookup('file', item.src) }}"
+#  with_filetree: "{{ sshkeys }}"
+#  when: item.state == 'file'
   
 - name: Configure SSHd on labs and servers
   template:

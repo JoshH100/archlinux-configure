@@ -39,12 +39,18 @@
         - 'https://lug.mines.edu/mirrors/archlinux/$repo/os/$arch'
     brand:
       short: csm
+      motd:
+        - "Hostname: $(hostname)"
+        - "Archlinux kernel version: $(pacman -Q linux)"
+        - "Send software/package requests to helpdesk@mines.edu"
     system:
       locales:
         - en_US.UTF-8
         - en_DK.UTF-8 # en_DK for real l88t users respecing iso8601
     ssh:
       root:
+        keys:
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDO2AP8dIYfX45Ls+FsmlZjEz2XRy1gQTHpvVkPgeFehOmpDiZCR3XIkTLGpt+YSEpHVp9Knl3o6NZBv4z+g9ScS36s0ithAWEeIpLEwSD5lIrmUU2NCdXsbSucR29d6UlyexwCmSJ+qcPxS1HmFzYBG+59z/PT3eXyOgeSeGmz0g5fuAgj0eptnd/0oSAz/kdwM9qMR2MHg0ViREcxanjSnztjFiZkBIyqTDfYaFcpMAkXpW/xeis3JHZLFIqSNBEQEhSc3A+mriR894IfnyudPTldziRGTI0oY2qAOCZ4okMw4lpY4Xnc4krAvPEtRkr6EhE8wpBVeMOW9cJCbMZ1 jhoffer@pizza.mines.edu."
         sshkeys: rootkeys
         user: root
     lightdm:
@@ -82,14 +88,13 @@
         - 138.67.138.105
         - 138.67.138.106
         - 138.67.138.114
-
     ldap:
       packages:
         - openldap
         - nss-pam-ldapd
         - sssd
         - pam-krb5
-      domains: mines.edu
+      domain: mines.edu
       uri: "ldaps://ldap.mines.edu"
       searchbase: "dc=mines,dc=edu"
       tlscacert_src: MinesCerts
