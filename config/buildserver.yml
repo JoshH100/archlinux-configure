@@ -5,6 +5,9 @@
   become: yes
   #include_vars: archvars.yml
   vars:
+    atftp:
+      args: "--no-multicast --maxthread 20 --verbose=6 /usr/share/ipxe-netboot/"
+
     rabbitmq:
       user:
         name: 'sensu'
@@ -46,6 +49,7 @@
     - {role: robertdebock.httpd, tags: ['httpd'] }
     - {role: server_sensu, tags: ['server_sensu']}
     - {role: ldap, tags: ['ldap']}
+    - {role: tftp, tags: ['tftp']}
     - {role: root, tags: ['root']}
     - {role: archmirror, tags: ['archmirror']}
     - {role: awx, tags: ['awx']}

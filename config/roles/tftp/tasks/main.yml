@@ -1,0 +1,5 @@
+- name: Install atftp, configure, and enable
+  block:
+    - pacman: name=atftp state=present
+    - template: src=atftpd.j2 dest=/etc/conf.d/atftpd
+    - systemd: name=atftpd state=started enabled=true
