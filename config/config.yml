@@ -155,6 +155,7 @@
 
   roles:
     - {role: common, tags: ['common']}
+    - {role: ssh, tags: ['ssh']}
     - {role: system, tags: ['system']}
     - {role: mount, tags: ['mount']}
     - {role: pacman, tags: ['pacman']}

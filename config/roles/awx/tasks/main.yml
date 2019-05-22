@@ -34,7 +34,6 @@
     ssh_key_data: "{{ lookup('file', '/home/josh/.ssh/id_rsa_mines') }}"
     tower_config_file: /root/.tower_cli.cfg
 
-
 - name: Add SSH creds for build server(s)
   tower_credential:
     name: "build server"
@@ -61,4 +60,3 @@
     name: Lab
     organization: CCIT
     state: present
-
