@@ -1,7 +1,0 @@
-- name: run dell command configure settings
-  shell: '{{item}}'
-  with_items:
-    - '{{cctk}} --valsetuppwd={{bios.setuppwd}} --autoonhr={{autoon.hr}}'
-    - '{{cctk}} --valsetuppwd={{bios.setuppwd}} --autoonmn={{autoon.min}}'
-  ignore_errors: true
-  when: (isdell|bool)

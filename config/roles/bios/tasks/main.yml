@@ -1,3 +1,36 @@
 ---
 - import_tasks: password.yml
   tags: [biospassword]
+
+- name: Set SATA mode to AHCI (Disable Intel RAID)
+  command: /opt/dell/dcc/cctk --valsetuppwd=intelctlm --embsataraid=ahci
+  ignore_errors: yes
+  when: (isdell|bool)
+
+- name: Enable UEFI network stack
+  command: /opt/dell/dcc/cctk --valsetuppwd=intelctlm --uefinwstack=enable
+  ignore_errors: yes
+  when: (isdell|bool)
+
+- name: Allow UEFI boot without admin password
+  command: /opt/dell/dcc/cctk --valsetuppwd=intelctlm --uefibootpathsecurity=never
+  ignore_errors: yes
+  when: (isdell|bool)
+
+- name: Enable UEFI boot
+  command: /opt/dell/dcc/cctk --valsetuppwd=intelctlm bootorder --activebootlist=uefi
+  ignore_errors: yes
+  when: (isdell|bool)
+
+- name: Set UEFI boot order
+  command: /opt/dell/dcc/cctk --valsetuppwd=intelctlm bootorder --sequence=hdd,embnic
+  ignore_errors: yes
+  when: (isdell|bool)
+  
+- name: run dell command configure settings
+  shell: '{{item}}'
+  with_items:
+    - '{{cctk}} --valsetuppwd={{bios.setuppwd}} --autoonhr={{autoon.hr}}'
+    - '{{cctk}} --valsetuppwd={{bios.setuppwd}} --autoonmn={{autoon.min}}'
+  ignore_errors: true
+  when: (isdell|bool)
