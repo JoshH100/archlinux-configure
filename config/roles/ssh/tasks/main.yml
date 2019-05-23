@@ -1,14 +1,10 @@
-# Needed for ansible 
-- name: Copy authorized keys to root account
+- name: Copy authorized keys to account(s)
   authorized_key:
-    user: "{{ user }}" 
+    user: "{{ item.user }}" 
     state: present
-    key: item
-  loop: ssh.root.keys
-  
-#    key: "{{ lookup('file', item.src) }}"
-#  with_filetree: "{{ sshkeys }}"
-#  when: item.state == 'file'
+    key: "{{ item.key }}"
+  loop: "{{ ssh1.ceys|flatten(levels=1) }}"
+  #loop: "{{ q('list', ssh.root.keys) }}"
   
 - name: Configure SSHd on labs and servers
   template:
