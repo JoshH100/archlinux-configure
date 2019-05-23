@@ -119,7 +119,7 @@
     network:
       domains: adit.mines.edu mines.edu
       config:
-        - 25-wired.network.j2
+        - 25-wired.network
       smb_share:
         name: zdrive
         domain: ADIT
