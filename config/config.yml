@@ -168,3 +168,6 @@
     - {role: upgrade, tags: ['upgrade']}
     - {role: bios, tags: ['bios']}
     - {role: secureboot, tags: ['secureboot']}
+    - {role: network , tags: ['network']}
+    - {role: ldap, tags: ['ldap']}
+    - {role: branding, tags: ['branding']}
