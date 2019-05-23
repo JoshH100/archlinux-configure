@@ -1,5 +1,5 @@
 - name: configure network
-  copy:
+  template:
     src: '{{ item }}'
     dest: '/etc/systemd/network/'
     owner: root
