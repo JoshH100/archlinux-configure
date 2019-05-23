@@ -34,24 +34,8 @@
 # ------------------------------
 
 #TODO: move these to specific roles
+
 - name: install packages for ldap/kerboros, dell configure
   pacman:
     name: dell-command-configure, ufw
     state: present 
-
-- name: avahi
-  pacman:
-    name: avahi, nss-mdns
-    state: present
-  notify: enable services
-  when: isgui|bool
-
-- name: printing support
-  pacman:
-    name: cups, gtk3 cups-pdf
-    state: present
-  notify: enable services
-
-- name: enable and (re)start services
-  command: echo
-  notify: enable services

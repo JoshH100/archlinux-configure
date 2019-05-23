@@ -15,5 +15,11 @@
     dest: '{{ item.dest }}'
   notify: enable lightdm
   with_items:
-    - {src: 'lightdm.conf.j2', dest: '/etc/lightdm/lightdm.conf' }
-    - {src: 'lightdm-gtk-greeter.conf.j2', dest: '/etc/lightdm/lightdm-gtk-greeter.conf' }
+    - {src: 'lightdm.conf', dest: '/etc/lightdm/lightdm.conf' }
+    - {src: 'lightdm-gtk-greeter.conf', dest: '/etc/lightdm/lightdm-gtk-greeter.conf' }
+    
+- name: install userspace stuff
+  pacman:
+    name: avahi, nss-mdns, cups, gtk3 cups-pdf
+    state: present
+  notify: enable services
