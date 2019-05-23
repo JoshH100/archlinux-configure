@@ -57,6 +57,7 @@
     lightdm:
       session-wrapper: /etc/lightdm/Xsession
       session-cleanup: /etc/lightdm/Xcleanup
+      user-session: cinnamon
     ansible:
       userprofile: "ansible-playbook /usr/share/mines-playbooks/archlinux-userprofile/userprofile.yml >> /tmp/ansible.log"
     isdell: true
@@ -168,3 +169,4 @@
     - {role: network , tags: ['network']}
     - {role: ldap, tags: ['ldap']}
     - {role: branding, tags: ['branding']}
+    - {role: graphical, tags: ['graphical']}
