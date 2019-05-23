@@ -19,12 +19,16 @@ grla110-[01:28]
 ck182-[18:34]
 
 [lab:children]
+classrooms
+labservers
+
+[classrooms]
 bb136
 ch215l
 ch275l
 grla
 ck182
-labservers
+
 
 [servers]
 plabnagios
