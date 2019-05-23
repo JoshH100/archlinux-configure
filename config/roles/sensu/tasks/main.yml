@@ -33,11 +33,14 @@
 
 - name: sensu config 
   template:
-    src: client.json.j2
-    dest: /etc/sensu/conf.d/client.json
+    src: "{{ item }}"
+    dest: /etc/sensu/conf.d/
     owner: sensu
     group: sensu
     mode: 0640
+  loop:
+    - client.json
+    - rabbitmq.json
     
 - name: enable sensu client service
   service:

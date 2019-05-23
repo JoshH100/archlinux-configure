@@ -1,10 +1,10 @@
-# Pacserve
 - name: deploy mirrors.conf and mirrorlist
   block:
     - template: src=mirrors.conf.j2 dest=/etc/pacman.d/mirrors.conf
     - copy: src=mirrorlist dest=/etc/pacman.d/mirrorlist
 
-  # update pacman.conf template to only include existing /etc/pacman.d/* conf files
+# update pacman.conf template to only include existing /etc/pacman.d/* conf files
+# TODO: remove old pacserve install/template logic
 - import_tasks: pacserve.yml
   tags: [pacserve]
 
@@ -12,7 +12,7 @@
   loop: "{{ pacmankeys|flatten(levels=1) }}"
   tags: [pacmankey]
   
-- name: Setup initial pacman.conf
+- name: Setup pacman.conf
   template:
     src: pacman.conf.j2
     dest: /etc/pacman.conf
