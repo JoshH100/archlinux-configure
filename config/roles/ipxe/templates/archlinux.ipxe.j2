@@ -1,7 +1,5 @@
 #!ipxe
 # vi: syntax=conf
-# Background :)
-#console --picture  {{ ipxe.ccit.backgroundurl }}
 # Figure out if client is 64-bit capable
 cpuid --ext 29 && set cpuarch x86_64 || set cpuarch i686
 
@@ -13,7 +11,6 @@ set release {{ ipxe.release }}
 #set extrabootoptions ip=dhcp net.ifnames=0 BOOTIF=01-${netX/mac} modprobe.blacklist=nouveau   
 set extrabootoptions {{ ipxe.extrabootoptions }} 
 set countrycode {{ ipxe.countrycode }}
-
 
 :main
 menu {{ ipxe.menu.title }} ${release}
@@ -39,20 +36,13 @@ reboot
 :exit
 exit
 
-:enter_mirror_url
-set countrycode
-echo Enter the mirror URL including the trailing slash.
-echo Example: http://some.host/archlinux/
-echo
-echo -n Mirror URL: ${} && read mirrorurl || goto select_mirror_country
-goto main
-
 :set_options
 echo -n Boot options: ${} && read extrabootoptions ||
 goto main
 
 :boot_ccit
-set mirrorurl {{ ipxe.ccit.mirrorurl }} 
+#set mirrorurl {{ ipxe.ccit.mirrorurl }} 
+set mirrorurl tftp://{{ ansible_hostname }} 
 set release ccit
 goto boot
 
@@ -61,11 +51,8 @@ echo Booting Arch Linux x86_64 ${release} from ${mirrorurl}
 echo
 kernel ${mirrorurl}/pxe/linux.signed || goto failed_download
 initrd ${mirrorurl}/pxe/initrd || goto failed_download
-imgargs linux.signed initrd=initrd archiso_http_srv=${mirrorurl}pxe/ archisobasedir=fs verify=n ${extrabootoptions}
+imgargs linux.signed initrd=initrd archiso_http_srv=${mirrorurl}/pxe/ archisobasedir=fs verify=n ${extrabootoptions}
 boot || goto failed_boot
-
-
-
 
 :failed_download
 echo

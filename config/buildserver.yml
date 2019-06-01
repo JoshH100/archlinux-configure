@@ -13,7 +13,14 @@
         scm_credential: "awx host"
         description: "Mines Lab and Server playbooks"
         organization: CCIT
-        url: 
+        url:
+      settings:
+        - {opt: ANSIBLE_FACT_CACHE_TIMEOUT, value: 10}
+        - {opt: DEFAULT_PROJECT_UPDATE_TIMEOUT, value: 10}
+        - {opt: DEFAULT_INVENTORY_UPDATE_TIMEOUT, value: 10}
+        - {opt: DEFAULT_JOB_TIMEOUT, value: 300}
+        - {opt: AWX_ISOLATED_CONNECTION_TIMEOUT, value: 10}
+        - {opt: AWX_ISOLATED_LAUNCH_TIMEOUT, value: 300}  
     atftp:
       args: "--no-multicast --maxthread 20 --verbose=6 /usr/share/ipxe-netboot/"
     rabbitmq:
@@ -31,7 +38,8 @@
       - ccitlabadmins
     module_list:
       - nfs
-      - cachefiles  
+      - cachefiles
+
         #  pre_tasks:
         #    - pacman: update_cache=true
         #      register: pacman_updated

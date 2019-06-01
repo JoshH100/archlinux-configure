@@ -1,0 +1,13 @@
+# TODO: remove mkosi suffix or move to variable
+- name: Build lasest image from mkosi config
+  block:
+    - file: path=/data state=directory
+    - pacman: name="mkosi-git" state=latest update_cache=true
+    - git: repo="{{ arch.mkosi.repo }}" dest="{{ arch.mkosi.dest }}"
+    - command: "/usr/bin/mkosi --output={{ arch.mkosi.output }} build"
+      args: chdir="{{ arch.mkosi.dest }}"
+    - file: path=/tmp/efi state=directory
+    - file: path=/tmp/fs state=directory
+    # mount here or in ipxe role?
+    - mount: path=/tmp/efi src="{{ arch.mkosi.dest }}" state=mounted fstype=iso9660 opts=loop, offset={{ arch.mkosi.iso.start1}}
+    - mount: path=/tmp/efi src="{{ arch.mkosi.dest }}" state=mounted fstype=iso9660 opts=loop, offset={{ arch.mkosi.iso.root }}

@@ -1,15 +1,29 @@
 - name: Setup iPXE server 
-  hosts: localhost 
+  #hosts: labbuild
+  hosts: localhost
   strategy: free
   gather_facts: True
-  become: no 
+  become: yes 
   vars:
+    arch:
+      mkosi:
+        repo: "https://github.com/JoshH100/archlive-mkosi.git"
+        dest: "/data/mkosi"
+        output: "/data/arch.raw"
+        iso:
+          start1: 1048576
+          root1: 269484032
     secureboot:
       cert: /etc/secureboot/DB.crt
       key: /etc/secureboot/DB.key
+    tftp:
+      args: "--no-multicast --maxthread 20 --verbose=6 /mnt/pxe/"
     ipxe:
-      dest: /mnt/pxe/
+      dest: /mnt/arch/
       images:
+        live:
+          src: /data/files/CCIT/linux/images/arch/root/root/archinstall
+          dest: /mnt/archinstall.tar.gz
         archlinux:
           linux:
             src: archlinux/linux
@@ -20,7 +34,6 @@
           rootfs:
             src: archlinux/airootfs.sfs
             dest: fs/x86_64/airootfs.sfs 
-
       release: 1
       extrabootoptions: ip=dhcp net.ifnames=0 BOOTIF=01-${netX/mac} modprobe.blacklist=nouveau
       countrycode: US
@@ -30,4 +43,6 @@
       menu:
         title: CCIT Archlinux Deployer
   roles:
+    - {role: mkosi, tags: ['mkosi']}
+    - {role: ipxe, tags: ['ipxe']}
     - {role: ipxe, tags: ['ipxe']}

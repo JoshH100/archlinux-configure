@@ -1,14 +1,39 @@
+- name: Startup tftp server to serve initial ipxe.efi
+  include_role: name=tftp
+
+- name: Create image using mkosi
+  include_role: name=mkosi
 
 - name: create necessary paths (pxe and fs)
   file: path="{{ item }}" state=directory mode=0755
   with_items:
     - "{{ ipxe.dest }}"
     - "{{ ipxe.dest }}/fs/x86_64/"
+    - "{{ ipxe.dest }}/efi"
+    - "{{ ipxe.dest }}/root"
+
+- name: symlink in ipxe binaries
+  file: src=/usr/share/ipxe-netboot/ dest="{{ ipxe.dest }}"/ipxe/ state=link
+
+- name: clone repo, build image, create ipxe fs structure
+  block:
+    - git: repo="{{ arch.mkosi.ropo }}" dest="{{arch.mkosi.dest}}"
+    #- shell: mkosi --output="{{ arch.mkosi.output }}" build chdir="{{ arch.mkosi.dest }}"
+    - mount: src="{{ arch.mkosi.output }}" path="{{ ipxe.dest }}/efi" opts="offset={{ arch.mkosi.iso.start1 }}" 
+    - mount: src="{{ arch.mkosi.output }}" path="{{ ipxe.dest }}/efi" opts="offset={{ arch.mkosi.iso.start1 }}"
+    - find: paths="{{ ipxe.dest }}/efi" recurse=yes patterns="linux"
+      register: found_linux  
+    - file: src="{{ arch.mkosi.output }}" path="{{ found_linux.files[0].path }}" state=link
+    - find: paths="{{ ipxe.dest }}/efi" recurse=yes patterns="initrd"
+      register: found_initrd 
+    - file: src="{{ arch.mkosi.output }}" path="{{ found_initrd.files[0].path }}" state=link
+   
 
 - name: update archinstall.tar.gz
   block:
     - file: path=/mnt/archinstall.tar.gz state=absent
-    - archive: path=/csm/mounts/files/CCIT/linux/images/arch/root/root/archinstall dest=/mnt/archinstall.tar.gz
+    - archive: path="{{ ipxe.images.live.src }}" dest="{{ ipxe.images.live.dest }}"
+
 
 - name: debug loop
   debug: msg="{{ item.value.src }} "
@@ -24,12 +49,11 @@
 - name: copy archlinux.ipxe from template
   template:
     src: archlinux.ipxe.j2
-    dest: /mnt/archlinux.ipxe
-
+    dest: "{{ ipxe.dest }}/archlinux.ipxe"
 
 - name: premessage for http server
   debug: msg="starting HTTP server on port 3000"
 
 - name: start http server on port 3000 in /mnt/
-  shell: python -m http.server --directory /mnt/ 3000 
+  shell: python -m http.server --directory {{ ipxe.dest }} 3000 
 
