@@ -4,10 +4,10 @@
     - file: path=/data state=directory
     - pacman: name="mkosi-git" state=latest update_cache=true
     - git: repo="{{ arch.mkosi.repo }}" dest="{{ arch.mkosi.dest }}"
+    - copy: src=DB.key dest="{{ arch.mkosi.key }}"
+    - copy: src=DB.crt dest="{{ arch.mkosi.crt }}"
     - command: "/usr/bin/mkosi --output={{ arch.mkosi.output }} build"
       args: chdir="{{ arch.mkosi.dest }}"
-    - file: path=/tmp/efi state=directory
-    - file: path=/tmp/fs state=directory
-    # mount here or in ipxe role?
-    - mount: path=/tmp/efi src="{{ arch.mkosi.dest }}" state=mounted fstype=iso9660 opts=loop, offset={{ arch.mkosi.iso.start1}}
-    - mount: path=/tmp/efi src="{{ arch.mkosi.dest }}" state=mounted fstype=iso9660 opts=loop, offset={{ arch.mkosi.iso.root }}
+    - command: "mksquashfs {{ arch.mkosi.output }} {{ destination }}/airootfs.sfs"
+    - command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ output }}/linux.signed"
+    - copy: src="{{ arch.mkosi.output}}/boot/initramfs-linux.img" dest="{{ output }}/initramfs-linux.img"

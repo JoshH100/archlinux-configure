@@ -1,51 +1,68 @@
 - name: Startup tftp server to serve initial ipxe.efi
   include_role: name=tftp
 
-- name: Create image using mkosi
-  include_role: name=mkosi
+#- name: Create image using mkosi
+#  include_role: name=mkosi
+#  vars:
+  #    output: "{{ ipxe.fs }}"
+
 
 - name: create necessary paths (pxe and fs)
   file: path="{{ item }}" state=directory mode=0755
   with_items:
     - "{{ ipxe.dest }}"
     - "{{ ipxe.dest }}/fs/x86_64/"
-    - "{{ ipxe.dest }}/efi"
-    - "{{ ipxe.dest }}/root"
+    #    - "{{ ipxe.dest }}/efi"
+    #- "{{ ipxe.dest }}/root"
 
 - name: symlink in ipxe binaries
-  file: src=/usr/share/ipxe-netboot/ dest="{{ ipxe.dest }}"/ipxe/ state=link
-
-- name: clone repo, build image, create ipxe fs structure
   block:
-    - git: repo="{{ arch.mkosi.ropo }}" dest="{{arch.mkosi.dest}}"
+    - pacman: name=ipxe-netboot state=present
+    - file: path="{{ ipxe.dest }}" state=directory mode=0755
+    - file: src="/usr/share/ipxe-netboot" dest="{{ ipxe.dest }}/ipxe" state=link
+
+- name: copy in files from mkosi
+  block:
+    - copy: src="{{ ipxe.fs }}/airootfs.sfs" dest="{{ ipxe.dest }}/fs/x86_64/airootfs.sfs"
+    #- copy: src="{{ ipxe.fs/linux.signed }}" dest="{{ ipxe.dest }}/linux"
+    - copy: src="{{ ipxe.fs }}/vmlinuz-linux" dest="{{ ipxe.dest }}/vmlinuz-linux"
+    - copy: src="{{ ipxe.fs }}/initramfs-linux.img" dest="{{ ipxe.dest }}/initramfs-linux.img"
+
+
+- name: fetch secure boot keys and certs 
+  block:
+    - pacman: name=sbsigntools state=present
+    - copy: src=DB.key dest="{{ arch.mkosi.key }}"
+    - copy: src=DB.crt dest="{{ arch.mkosi.crt }}"
+    - command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ ipxe.dest }}/vmlinuz-linux.signed {{ ipxe.dest }}/vmlinuz-linux"
+
+#- name: clone repo, build image, create ipxe fs structure
+  #  block:
+    #- git: repo="{{ arch.mkosi.ropo }}" dest="{{arch.mkosi.dest}}"
     #- shell: mkosi --output="{{ arch.mkosi.output }}" build chdir="{{ arch.mkosi.dest }}"
-    - mount: src="{{ arch.mkosi.output }}" path="{{ ipxe.dest }}/efi" opts="offset={{ arch.mkosi.iso.start1 }}" 
-    - mount: src="{{ arch.mkosi.output }}" path="{{ ipxe.dest }}/efi" opts="offset={{ arch.mkosi.iso.start1 }}"
-    - find: paths="{{ ipxe.dest }}/efi" recurse=yes patterns="linux"
-      register: found_linux  
-    - file: src="{{ arch.mkosi.output }}" path="{{ found_linux.files[0].path }}" state=link
-    - find: paths="{{ ipxe.dest }}/efi" recurse=yes patterns="initrd"
-      register: found_initrd 
-    - file: src="{{ arch.mkosi.output }}" path="{{ found_initrd.files[0].path }}" state=link
+    #- mount: src="{{ arch.mkosi.output }}" path="{{ ipxe.dest }}/efi" opts="offset={{ arch.mkosi.iso.start1 }}" 
+    #- mount: src="{{ arch.mkosi.output }}" path="{{ ipxe.dest }}/efi" opts="offset={{ arch.mkosi.iso.start1 }}"
+    #- find: paths="{{ ipxe.dest }}/efi" recurse=yes patterns="linux"
+    #  register: found_linux  
+    #- file: src="{{ arch.mkosi.output }}" path="{{ found_linux.files[0].path }}" state=link
+    #- find: paths="{{ ipxe.dest }}/efi" recurse=yes patterns="initrd"
+    #  register: found_initrd 
+    #- file: src="{{ arch.mkosi.output }}" path="{{ found_initrd.files[0].path }}" state=link
    
 
-- name: update archinstall.tar.gz
-  block:
-    - file: path=/mnt/archinstall.tar.gz state=absent
-    - archive: path="{{ ipxe.images.live.src }}" dest="{{ ipxe.images.live.dest }}"
-
+#- name: update archinstall.tar.gz
+#  block:
+    #    - file: path=/mnt/archinstall.tar.gz state=absent
+    #- archive: path="{{ ipxe.images.live.src }}" dest="{{ ipxe.images.live.dest }}"
 
 - name: debug loop
   debug: msg="{{ item.value.src }} "
   loop: "{{ ipxe.images.archlinux | dict2items }}"
 
-- name: copy linux, initrd, and rootfs to appropriate paths
-  copy: src="{{ item.value.src }}" dest="{{ ipxe.dest}}/{{ item.value.dest }}"
-  loop: "{{ ipxe.images.archlinux | dict2items }}"
+#- name: copy linux, initrd, and rootfs to appropriate paths
+#  copy: src="{{ item.value.src }}" dest="{{ ipxe.dest}}/{{ item.value.dest }}"
+#  loop: "{{ ipxe.images.archlinux | dict2items }}"
   
-- name: sign kernel
-  shell: sbsign --cert {{ secureboot.cert }} --key {{ secureboot.key}} {{ ipxe.dest}}/{{ ipxe.images.archlinux.linux.dest }} 
-
 - name: copy archlinux.ipxe from template
   template:
     src: archlinux.ipxe.j2
