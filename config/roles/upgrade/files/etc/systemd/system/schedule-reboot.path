@@ -1,5 +1,5 @@
 [Unit]
-Description=reboot for updates on demand
+Description=Reboot for updates on demand
 
 [Path]
 PathExists=/system-update

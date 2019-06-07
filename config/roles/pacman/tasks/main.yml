@@ -3,8 +3,6 @@
     - template: src=mirrors.conf.j2 dest=/etc/pacman.d/mirrors.conf
     - copy: src=mirrorlist dest=/etc/pacman.d/mirrorlist
 
-# update pacman.conf template to only include existing /etc/pacman.d/* conf files
-# TODO: remove old pacserve install/template logic
 - import_tasks: pacserve.yml
   tags: [pacserve]
 
@@ -28,14 +26,3 @@
   copy:
     src: paccache.hook
     dest: /etc/pacman.d/hooks/paccache.hook
-
-
-# Not sure where to put this stuff
-# ------------------------------
-
-#TODO: move these to specific roles
-
-- name: install packages for ldap/kerboros, dell configure
-  pacman:
-    name: dell-command-configure, ufw
-    state: present 

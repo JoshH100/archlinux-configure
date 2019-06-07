@@ -2,6 +2,8 @@
   pacman: name="{{ item }}" state=present update_cache=yes
   loop:
     - lzop
+  when: doupgrade|bool
+
 
 - name: copy upgrade scripts and services
   copy:
@@ -12,6 +14,7 @@
   with_items:
     - { name: "etc", mode: "0644" }
     - { name: "usr", mode: "0755" }
+  notify: daemon-reload
 
 - name: enable schedule-reboot and download-updates timer
   service:
@@ -24,8 +27,8 @@
     - 'schedule-reboot.path'
     - 'download-updates.timer'
     - 'safe-upgrade.timer'
-    - 'pacman-keyring-update.timer'
     - 'paccache.timer'
+    #- 'pacman-keyring-update.timer' # has issues 2019/06/06
 
 # ansible has bug where 'provided' packages are seen as installed so need ignore_errors for now
 - name: Remove problematic and obsolete packages
@@ -34,18 +37,21 @@
     state: absent
     force: true
   ignore_errors: true
+  when: doupgrade|bool
 
 - name: update system
   pacman:
     upgrade: yes
     update_cache: yes
   register: updated
+  when: doupgrade|bool
 
 - name: install_packages list present
   pacman:
     name: "{{ packages.install }}"
     update_cache: yes
     state: present
+  when: doupgrade|bool
 
 # also have pacman hook... both methods have issues detecting every change to /boot
 # (kernel, nvidia, etc)

@@ -1,7 +1,7 @@
 [Unit]
 Description=Schedule reboot for systemd updates
-#AssertPathExistsGlob=!/run/user/*
 AssertPathExists=/system-update
+ConditionPathExists=!/var/lib/pacman/db.lck
 
 [Service]
 Type=oneshot

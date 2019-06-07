@@ -3,6 +3,7 @@
   strategy: free
   gather_facts: True
   vars:
+    doupgrade: true
     software_remove:
       - jre7-openjdk
       - jre7-openjdk-headless
@@ -16,8 +17,8 @@
         - entrust.mines.edu
     pacserve:
       # enable use of this flag
-      enabled: false
-      args: --multicast --peer http://greyfox.mines.edu:15678
+      enabled: true
+      args: --multicast --peer http://labbuild-test1.mines.edu:15678
     cups:
       servername: cups.mines.edu
     pacman:

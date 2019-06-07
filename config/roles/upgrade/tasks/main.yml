@@ -1,3 +1,6 @@
 ---
+- include_role: name=pacman
+  tags: [pacman]
+
 - import_tasks: upgrade.yml
   tags: [upgrade]

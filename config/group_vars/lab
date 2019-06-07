@@ -1,8 +1,14 @@
 # set vi:syntax=yaml
 packages:
   remove:
-    #  - i3-wm # causing issues?
-    #  - vim
+    - python-pyside
+    - python-pyside-common
+    - python-shiboken
+    - python2-pyside
+    - python2-shiboken
+    - shiboken
+    - perl-gtk2-ex-podviewer
+    - perl-gtk2-ex-simple-list
     - arm
     - attica-qt4
     - embree2
@@ -458,7 +464,6 @@ packages:
     - meson
     - metis
     - mimeo
-    - mines-meta
     - mines-playbooks
     - minicom
     - mlocate
@@ -533,7 +538,6 @@ packages:
     - perl
     - perl-dbd-mysql
     - perl-file-mimeinfo
-    - perl-gtk2-ex-podviewer
     - perl-test-perltidy
     - pgcli-git
     - phonon-qt5-gstreamer
@@ -636,7 +640,6 @@ packages:
     - python2-pygit2
     - python2-pylint
     - python2-pyqt5
-    - python2-pyside
     - python2-qtpy
     - python2-scipy
     - python2-sphinx

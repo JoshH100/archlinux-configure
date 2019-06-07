@@ -2,7 +2,7 @@
 MINUID=1000
 CAN_REBOOT=false 
 
-NUMUSERS=$( /usr/local/bin/listusers | wc -l)
+NUMUSERS=$( /usr/local/bin/listusers | wc -l )
 if [ "$NUMUSERS" -eq 0 ]; then 
     CAN_REBOOT=true 
 fi

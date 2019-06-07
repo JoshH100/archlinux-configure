@@ -6,6 +6,7 @@
   block:
     - shell: "pacman-key --init"
     - shell: "pacman-key --populate"
+  ignore_errors: true 
   when: pacmankeyring.stat.exists != true
 
 # Attempt to use signing name as destination name
@@ -14,6 +15,7 @@
     - get_url: url="{{ item.src }}" dest="/etc/pacman.d/{{ item.name }}"
     - shell: "pacman-key --add /etc/pacman.d/{{ item.name }}"
     - shell: "pacman-key --lsign-key {{ item.name }}"
+  ignore_errors: true 
   when: item.src is defined
 
 - name: Import pacman keys
