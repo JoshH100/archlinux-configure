@@ -25,7 +25,7 @@
     - pacman: name=squashfs-tools state=present
     - command: "mksquashfs {{ arch.mkosi.output }} {{ output }}/airootfs.sfs"
     - command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ output }}/vmlinuz-linux {{ arch.mkosi.output }}boot/vmlinuz-linux"
-    - copy: src="{{ arch.mkosi.output}}boot/initramfs-linux.img" dest="{{ output }}/initramfs-linux.img"
+    - copy: src="{{ arch.mkosi.output}}boot/initramfs-linux.img" dest="{{ output }}/initramfs-linux.img" remote_src=true
 
 
 # mkosi fails to build when inside ansible context
