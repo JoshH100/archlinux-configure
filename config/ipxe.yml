@@ -43,8 +43,8 @@
       extrabootoptions: ip=dhcp net.ifnames=0 BOOTIF=01-${netX/mac} modprobe.blacklist=nouveau
       countrycode: US
       ccit:
-        mirrorurl: http://greyfox.mines.edu:3000/
-        backgroundurl: http://greyfox.mines.edu:3000/windows95.jpg
+        mirrorurl: http://labbuild-test1.mines.edu:3000/
+        backgroundurl: http://labbuild-test1.mines.edu:3000/windows95.jpg
       menu:
         title: CCIT Archlinux Deployer
   roles:
