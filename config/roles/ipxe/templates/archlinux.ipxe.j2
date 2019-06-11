@@ -52,7 +52,7 @@ echo
 #kernel ${mirrorurl}/vmlinuz-linux.signed || goto failed_download
 kernel ${mirrorurl}/vmlinuz-linux || goto failed_download
 initrd ${mirrorurl}/initramfs-linux.img || goto failed_download
-imgargs vmlinuz-linux initrd=initrd archiso_http_srv=${mirrorurl}/ archisobasedir=fs verify=n ${extrabootoptions}
+imgargs vmlinuz-linux initrd=initramfs-linux.img archiso_http_srv=${mirrorurl}/ archisobasedir=fs verify=n ${extrabootoptions}
 #imgargs linux.signed initrd=initrd archiso_http_srv=${mirrorurl}/ archisobasedir=fs verify=n ${extrabootoptions}
 boot || goto failed_boot
 
