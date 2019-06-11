@@ -48,6 +48,4 @@
       menu:
         title: CCIT Archlinux Deployer
   roles:
-    #- {role: mkosi, tags: ['mkosi']}
-    - {role: ipxe, tags: ['ipxe']}
     - {role: ipxe, tags: ['ipxe']}
