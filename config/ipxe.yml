@@ -1,7 +1,7 @@
 - name: Setup iPXE server 
   hosts: labbuild
   #hosts: localhost
-  strategy: free
+  #strategy: free
   #gather_facts: True
   become: yes 
   vars:
@@ -9,7 +9,7 @@
       mkosi:
         repo: "https://github.com/JoshH100/archlive-mkosi.git"
         dest: "/data/mkosi"
-        output: "/data/arch9/"
+        output: "/data/arch/"
         key: "/tmp/sb.key"
         key_src: "/data/sb/DB.key"
         crt_src: "/data/sb/DB.crt"
@@ -21,7 +21,7 @@
       cert: "/etc/secureboot/DB.crt"
       key: "/etc/secureboot/DB.key"
     atftp:
-      args: "--no-multicast --maxthread 20 --verbose=6 /mnt/pxe/"
+      args: "--no-multicast --maxthread 20 --verbose=6 /mnt/arch"
     ipxe:
       dest: /mnt/arch
       fs: /mnt/fs

@@ -1,20 +1,24 @@
+- name: check if paserve is installed
+  shell: pacman -Q pacserve
+  register: pac_pacserve
+
+- name: Setup pacman.conf
+  template:
+    src: pacman.conf.j2
+    dest: /etc/pacman.conf
+    #  ignore_errors: yes
+
 - name: deploy mirrors.conf and mirrorlist
   block:
     - template: src=mirrors.conf.j2 dest=/etc/pacman.d/mirrors.conf
     - copy: src=mirrorlist dest=/etc/pacman.d/mirrorlist
 
-- import_tasks: pacserve.yml
-  tags: [pacserve]
-
 - include_tasks: gpg.yml
   loop: "{{ pacmankeys|flatten(levels=1) }}"
   tags: [pacmankey]
   
-- name: Setup pacman.conf
-  template:
-    src: pacman.conf.j2
-    dest: /etc/pacman.conf
-  ignore_errors: yes
+- import_tasks: pacserve.yml
+  tags: [pacserve]
 
 - name: Create pacman.d hook folder
   file:

@@ -32,7 +32,7 @@
       theme: clint
       term: linux
     contact_email: jhoffer@mines.edu
-    mines_repo_host: greyfox.mines.edu:15678
+    mines_repo_host: labbuild-test1:15678
     type: server
     sudoers:
       - ccitlabadmins

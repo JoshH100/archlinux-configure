@@ -1,7 +1,11 @@
 - name: Post install config 
-  hosts: all 
+  hosts: lab
   strategy: free
   gather_facts: True
+  pre_tasks:
+    - name: check if paserve is installed
+      shell: pacman -Q pacserve
+      register: pac_pacserve
   vars:
     doupgrade: true
     software_remove:
@@ -38,9 +42,10 @@
         - "etc/ssh/sshd_config"
         - "etc/systemd/logind.conf"
       repos:
-          - {name: mines2, server: 'http://labbuild-test1.mines.edu:15678/pacman/$repo/$arch' }
+          - {name: mines2, server: 'http://labbuild-test1.mines.edu:15678/$repo' }
           - {name: sublime-text, server: 'https://download.sublimetext.com/arch/stable/x86_64' }
       mirrors:
+        - 'http://labbuild-test1/$repo/os/$arch'
         - 'https://lug.mines.edu/mirrors/archlinux/$repo/os/$arch'
     brand:
       short: csm
@@ -80,7 +85,7 @@
           src: buildfunctions.j2
           dest: /etc/zsh/buildfunctions
     contact_email: jhoffer@mines.edu
-    mines_repo_host: greyfox.mines.edu:15678
+    mines_repo_host: labbuild-test1.mines.edu:15678
     type: lab
     repos:
       mines2:

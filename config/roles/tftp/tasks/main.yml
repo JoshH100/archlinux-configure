@@ -2,4 +2,5 @@
   block:
     - pacman: name=atftp state=present
     - template: src=atftpd.j2 dest=/etc/conf.d/atftpd
+      notify: reload atftpd
     - systemd: name=atftpd state=started enabled=true

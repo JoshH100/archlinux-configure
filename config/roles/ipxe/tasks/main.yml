@@ -1,11 +1,15 @@
 - name: Startup tftp server to serve initial ipxe.efi
   include_role: name=tftp
 
-#- name: Create image using mkosi
-#  include_role: name=mkosi
-#  vars:
-  #    output: "{{ ipxe.fs }}"
+- name: check if we already all the files for iPXE
+  stat: path="{{ ipxe.dest }}/fs/x86_64/airootfs.sfs" get_md5=no
+  register: previous
 
+- name: Create image using mkosi
+  include_role: name=mkosi
+  when: previous.stat.islnk is not defined
+  vars:
+    output: "{{ ipxe.fs }}"
 
 - name: create necessary paths (pxe and fs)
   file: path="{{ item }}" state=directory mode=0755
@@ -19,22 +23,28 @@
   block:
     - pacman: name=ipxe-netboot state=present
     - file: path="{{ ipxe.dest }}" state=directory mode=0755
-    - file: src="/usr/share/ipxe-netboot" dest="{{ ipxe.dest }}/ipxe" state=link
+    - file: src="/usr/share/ipxe-netboot/ipxe.efi" dest="{{ ipxe.dest }}/ipxe.efi" state=link
+    #- file: src="/usr/share/ipxe-netboot" dest="{{ ipxe.dest }}/ipxe" state=link
 
+
+# Currenly copies from the local host (remote_src=no)
 - name: copy in files from mkosi
   block:
-    - copy: src="{{ ipxe.fs }}/airootfs.sfs" dest="{{ ipxe.dest }}/fs/x86_64/airootfs.sfs"
-    #- copy: src="{{ ipxe.fs/linux.signed }}" dest="{{ ipxe.dest }}/linux"
-    - copy: src="{{ ipxe.fs }}/vmlinuz-linux" dest="{{ ipxe.dest }}/vmlinuz-linux"
-    - copy: src="{{ ipxe.fs }}/initramfs-linux.img" dest="{{ ipxe.dest }}/initramfs-linux.img"
+    - copy: src="{{ ipxe.fs }}/airootfs.sfs" dest="{{ ipxe.dest }}/fs/x86_64/airootfs.sfs" remote_src=yes
+    #- copy: src="{{ ipxe.fs/linux.signed }}" dest="{{ ipxe.dest }}/linux" remote_src= yes
+    - copy: src="{{ ipxe.fs }}/vmlinuz-linux" dest="{{ ipxe.dest }}/vmlinuz-linux" remote_src=yes
+    - copy: src="{{ ipxe.fs }}/initramfs-linux.img" dest="{{ ipxe.dest }}/initramfs-linux.img" remote_src=yes
 
 
-- name: fetch secure boot keys and certs 
+# add check if kernel is signed and then copy with .signed extension and skip singing
+
+- name: fetch secure boot keys and certs # can sbsign write to same path?? 
   block:
     - pacman: name=sbsigntools state=present
     - copy: src=DB.key dest="{{ arch.mkosi.key }}"
     - copy: src=DB.crt dest="{{ arch.mkosi.crt }}"
-    - command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ ipxe.dest }}/vmlinuz-linux.signed {{ ipxe.dest }}/vmlinuz-linux"
+    - command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ ipxe.dest }}/vmlinuz-linux {{ ipxe.dest }}/vmlinuz-linux"
+  when: false|bool
 
 #- name: clone repo, build image, create ipxe fs structure
   #  block:

@@ -2,12 +2,32 @@
 - name: Build lasest image from mkosi config
   block:
     - file: path=/data state=directory
+    - file: path="{{ output }}" state=directory
     - pacman: name="mkosi-git" state=latest update_cache=true
     - git: repo="{{ arch.mkosi.repo }}" dest="{{ arch.mkosi.dest }}"
     - copy: src=DB.key dest="{{ arch.mkosi.key }}"
     - copy: src=DB.crt dest="{{ arch.mkosi.crt }}"
-    - command: "/usr/bin/mkosi --output={{ arch.mkosi.output }} build"
-      args: chdir="{{ arch.mkosi.dest }}"
-    - command: "mksquashfs {{ arch.mkosi.output }} {{ destination }}/airootfs.sfs"
-    - command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ output }}/linux.signed"
-    - copy: src="{{ arch.mkosi.output}}/boot/initramfs-linux.img" dest="{{ output }}/initramfs-linux.img"
+    - template: src=build-mkosi.j2 dest=/tmp/build-mkosi mode=0755
+
+- name: pause to run mkosi
+  pause: "Run /tmp/build-mkosi and verify output in {{ arch.mkosi.output }}"
+  #with_items: "{{ play_hosts}}"
+
+- name: cleanup old files
+  file: path="{{ item }}" state=absent
+  loop:
+    - "{{ output }}/airootfs.sfs"
+    - "{{ output }}/linux.signed"
+    - "{{ output }}/initramfs-linux.img"
+
+- name: continue processes mkosi output
+  block:
+    - pacman: name=squashfs-tools state=present
+    - command: "mksquashfs {{ arch.mkosi.output }} {{ output }}/airootfs.sfs"
+    - command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ output }}/vmlinuz-linux {{ arch.mkosi.output }}boot/vmlinuz-linux"
+    - copy: src="{{ arch.mkosi.output}}boot/initramfs-linux.img" dest="{{ output }}/initramfs-linux.img"
+
+
+# mkosi fails to build when inside ansible context
+#    - command: "/usr/bin/mkosi --output={{ arch.mkosi.output }} build"
+#  args: chdir="{{ arch.mkosi.dest }}"

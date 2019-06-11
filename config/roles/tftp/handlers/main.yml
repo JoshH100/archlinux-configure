@@ -1,0 +1,5 @@
+- name: reload atftpd
+  block:
+    - systemd: name=atftpd.service state=reloaded
+    - systemd: name=atftpd.service state=restarted
+
