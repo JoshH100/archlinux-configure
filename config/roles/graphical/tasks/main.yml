@@ -2,24 +2,21 @@
   block:
     - include_role: name=branding
 
-- name: install lightdm login manager
-  pacman:
-      name: lightdm, lightdm-gtk-greeter, xorg-server
-      state: present
-      update_cache: yes
-  when: isgui |bool
+# check if 'when' works on blocks
+- name: lightdm
+  block:
+    - name: lightdm: Install
+      pacman: name=lightdm, lightdm-gtk-greeter, xorg-server state=present
+    - name: lightdm: Configure Xsession script
+      lineinfile: state=present line={{ ansible.userprofile }}  insertbefore="^# Run user xsession shell script" path=/etc/lightdm/Xsession
+    - name: lightdm: configure lightdm.conf 
+      template: src='lightdm.conf' dest='/etc/lightdm/lightdm.conf'
+    - name: lightdm: configure gtk-greeter 
+      template: src='lightdm-gtk-greeter.conf' dest='/etc/lightdm/lightdm-gtk-greeter.conf'
+    when: (isgui|bool)
 
-- name: Configure lightdm config 
-  template:
-    src: '{{ item.src }}'
-    dest: '{{ item.dest }}'
-  notify: enable lightdm
-  with_items:
-    - {src: 'lightdm.conf', dest: '/etc/lightdm/lightdm.conf' }
-    - {src: 'lightdm-gtk-greeter.conf', dest: '/etc/lightdm/lightdm-gtk-greeter.conf' }
-    
 - name: install userspace stuff
   pacman:
-    name: avahi, nss-mdns, cups, gtk3 cups-pdf
+    name: avahi, nss-mdns, cups, gtk3, cups-pdf
     state: present
   notify: enable services

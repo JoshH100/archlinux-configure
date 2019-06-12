@@ -15,18 +15,8 @@
      - {src: 'logind.conf', dest: '/etc/systemd/logind.conf' }
      - {src: '40-max-user-watches.conf', dest: '/etc/sysctl.d/40-max-user-watches.conf'}  
 
+
 - name: Enable linux-modules-cleanup
   service:
     name: linux-modules-cleanup.service
     enabled: yes
-
-- name: Enable ansible userprofile playbook at login
-  lineinfile: state=present line={{ ansible.userprofile }}  insertbefore="^# Run user xsession shell script" path=/etc/lightdm/Xsession
-  when: (isgui|bool)
-
-# TODO: create /etc/samba folder first - testing now
-- name: Create empty smbclient.conf
-  block:
-    - file: path=/etc/samba/ state=directory
-    - pacman: name=samba state=present
-    - copy: content="" dest=/etc/samba/smb.conf force=no
