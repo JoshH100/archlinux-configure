@@ -2,10 +2,6 @@
   hosts: lab
   strategy: free
   gather_facts: True
-  pre_tasks:
-    - name: check if paserve is installed
-      shell: pacman -Q pacserve
-      register: pac_pacserve
   vars:
     doupgrade: true
     software_remove:
@@ -157,7 +153,9 @@
   pre_tasks:
     - pacman: update_cache=true
       register: pacman_updated
-
+    - name: check if paserve is installed
+      shell: pacman -Q pacserve
+      register: pac_pacserve
   roles:
     - {role: common, tags: ['common']}
     - {role: ssh, tags: ['ssh']}

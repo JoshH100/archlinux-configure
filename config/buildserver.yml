@@ -3,7 +3,6 @@
   strategy: free
   gather_facts: True
   become: yes
-  #include_vars: archvars.yml
   vars:
     awx:
       org: CCIT
