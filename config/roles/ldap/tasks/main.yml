@@ -41,11 +41,11 @@
   template:
     src: '{{ item.src }}' 
     dest: '{{ item.dest }}' 
-    mode: 0644
+    mode: '{{ item.mode }}'
   with_items:
-    - {src: 'ldap.conf.j2', dest: '/etc/openldap/ldap.conf' } 
-    - {src: 'sssd.conf.j2', dest: '/etc/sssd/sssd.conf' } 
-    - {src: 'krb5.conf.j2', dest: '/etc/krb5.conf'}  
+    - {src: 'ldap.conf.j2', dest: '/etc/openldap/ldap.conf' , mode: '0644'} 
+    - {src: 'sssd.conf.j2', dest: '/etc/sssd/sssd.conf', mode: '0600'} 
+    - {src: 'krb5.conf.j2', dest: '/etc/krb5.conf', mode: '0644'}  
   notify: enable sssd
 
 - name: configure krb5 and keytab
