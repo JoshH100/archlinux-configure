@@ -1,3 +1,6 @@
+- name: install sudo
+  pacman: name=sudo state=present
+
 - name: set locale(s)
   locale_gen:
     name: "{{ item }}"
@@ -24,7 +27,6 @@
     validate: '/usr/bin/visudo -cf %s'
   loop: "{{ sudo.groups }}"
 
-
   #TODO: cleanup / use loops - move maybe?
   #TODO: create generic role for desktop entries
 - name: Setup usr/local/bin
@@ -34,3 +36,18 @@
     - template: src=entry.desktop.j2 dest=/usr/share/applications/zdrive.desktop
 
 
+- name: system settings
+  block:
+    - name: settings - logind
+      lineinfile:
+        path: /etc/systemd/logind.conf
+        line: 'KillUserProcesses=yes'
+        regexp: '^KillUserProcesses='
+        insertafter: '[Login]'
+        create: yes
+    - name: settings - sysctl max user watches
+      lineinfile:
+        path: /etc/systemd/logind.conf
+        line: 'fs.inotify.max_user_watches=524288'
+        insertbefore: BOF
+        create: yes

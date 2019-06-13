@@ -1,0 +1,7 @@
+- name: java - setup environment for better font
+  lineinfile:
+    path: /etc/environment
+    regexp: "^_JAVA_OPTIONS="
+    line: "_JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=gasp'"
+    insertbefore: BOF
+    create: true

@@ -2,18 +2,21 @@
   block:
     - include_role: name=branding
 
-# check if 'when' works on blocks
+- name: require video (drivers) role
+  block:
+    - include_role: name=video
+
 - name: lightdm
   block:
-    - name: lightdm: Install
-      pacman: name=lightdm, lightdm-gtk-greeter, xorg-server state=present
-    - name: lightdm: Configure Xsession script
+    - name: lightdm - install
+      pacman: name='lightdm, lightdm-gtk-greeter, xorg-server' state=present
+    - name: lightdm - Configure Xsession script
       lineinfile: state=present line={{ ansible.userprofile }}  insertbefore="^# Run user xsession shell script" path=/etc/lightdm/Xsession
-    - name: lightdm: configure lightdm.conf 
+    - name: lightdm - configure lightdm.conf 
       template: src='lightdm.conf' dest='/etc/lightdm/lightdm.conf'
-    - name: lightdm: configure gtk-greeter 
+    - name: lightdm - configure gtk-greeter 
       template: src='lightdm-gtk-greeter.conf' dest='/etc/lightdm/lightdm-gtk-greeter.conf'
-    when: (isgui|bool)
+  when: (isgui|bool)
 
 - name: install userspace stuff
   pacman:

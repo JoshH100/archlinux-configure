@@ -1,3 +1,6 @@
+- name: sshd - install openSSH
+  pacman: name=openssh state=present
+
 - name: Copy authorized keys to account(s)
   authorized_key:
     user: "{{ item.user }}" 
@@ -6,7 +9,7 @@
   loop: "{{ ssh1.ceys|flatten(levels=1) }}"
   #loop: "{{ q('list', ssh.root.keys) }}"
   
-- name: Configure SSHd on labs and servers
+- name: sshd - configure 
   template:
     src: '{{ item.src }}'
     dest: '{{ item.dest }}'
@@ -14,17 +17,12 @@
     - {src: 'sshd_config.j2', dest: '/etc/ssh/sshd_config' }
     - {src: 'ssh_config.j2', dest: '/etc/ssh/ssh_config' }
 
-- name: Disable sshd.service
-  service: 
-    name: sshd.service
-    state: stopped
-    enabled: no
+- name: sshd - prefer socket
+  block:
+    - name: sshd - disable service
+      service: name=sshd.service state=stopped enabled=no
+    - name: sshd - enable socket
+      service: name=sshd.socket state=started enabled=yes
 
-- name: Enable sshd socket
-  service:
-    name: sshd.socket
-    state: started
-    enabled: yes
-
-- name: populate system known_hosts
+- name: sshd - populate system known_hosts
   copy: src=known_hosts dest=/etc/ssh/ssh_known_hosts

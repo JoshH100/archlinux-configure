@@ -1,21 +1,21 @@
 ---
-- import_tasks: video.yml
-  tags: [video]
+  #- import_tasks: video.yml
+  #tags: [video]
   #- import_tasks: motd.yml
   #tags: [motd]
   #- import_tasks: bios.yml
   #tags: [bios]
-- import_tasks: config.yml
-  tags: [config]
+  #- import_tasks: config.yml
+  #tags: [config]
 - import_tasks: services.yml
   tags: [services]
   #- import_tasks: security.yml
   #tags: [security]
-- import_tasks: notify.yml
-  tags: [notify]
-- import_tasks: bin.yml
-  tags: [bin]
-- import_tasks: bootloader.yml
-  tags: [bootloader]
+  #- import_tasks: notify.yml
+  #tags: [notify]
+  #- import_tasks: bin.yml
+  #tags: [bin]
+  #- import_tasks: bootloader.yml
+  #tags: [bootloader]
   #- import_tasks: command-configure.yml
   #tags: [dell-cc]

@@ -24,7 +24,7 @@
     #    - {src: 'lightdm.conf', dest: '/etc/lightdm/lightdm.conf'}
   when: (type == "lab") and (isgui | bool)
 
-- name: configure pam, nsswitch, sshd, cups
+- name: configure pam, nsswitch, sshd 
   copy:
     src: '{{ item.src }}'
     dest: '{{ item.dest }}'
@@ -36,7 +36,6 @@
     - {src: 'passwd', dest: '/etc/pam.d/passwd'}
     - {src: 'nobeep.conf', dest: '/etc/modprobe.d/nobeep.conf'} #MOVE 
     - {src: 'waitnetwork.conf', dest: '/etc/systemd/system/sssd.service.d/'}
-    - {src: 'client.conf', dest: '/etc/cups/client.conf'} #MOVE
 
 - name: configrure sssd, krb5
   template:
@@ -62,4 +61,4 @@
 
 - name: set timezone
   timezone:
-    name: America/Denver
+    name: "{{ system.timezone }}"

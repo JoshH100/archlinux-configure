@@ -7,11 +7,6 @@
     name: pacserve
     state: latest
 
-- name: check pacserve installed
-  shell: pacman -Q pacserve
-  register: pac_pacserve
-  tags: pacmantemp
-
 - name: print pacserve
   debug: msg="{{pacserve}}"
 

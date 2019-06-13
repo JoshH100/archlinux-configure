@@ -1,0 +1,16 @@
+- name: Install and Configure Cups
+  block:
+    - name: cups- install
+      pacman: name="cups, cups-pdf" state=present
+    - name: cups- configure
+      lineinfile:
+        path: /etc/cups/client.conf
+        state: present
+        regexp: '^ServerName.*'
+        line: "ServerName {{ cups.servername }}"
+        insertbefore: BOF
+    - name: cups- enable service
+      systemd: name=cups-browsed.service state=started enabled=yes
+
+
+

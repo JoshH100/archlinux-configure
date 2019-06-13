@@ -1,14 +1,3 @@
-- name: Install mlocate 
-  package:
-    name: mlocate
-    state: present
-
-- name: Start and enable services
-  systemd:
-    name: updatedb.timer
-    state: started
-    enabled: yes
-
 - name: Install at
   package:
     name: at

@@ -1,7 +1,3 @@
-- name: check if paserve is installed
-  shell: pacman -Q pacserve
-  register: pac_pacserve
-
 - name: Setup pacman.conf
   template:
     src: pacman.conf.j2
@@ -20,13 +16,21 @@
 - import_tasks: pacserve.yml
   tags: [pacserve]
 
-- name: Create pacman.d hook folder
-  file:
-    path: /etc/pacman.d/hooks
-    state: directory
-    owner: root
-    
-- name: Setup paccache hook
-  copy:
-    src: paccache.hook
-    dest: /etc/pacman.d/hooks/paccache.hook
+- name: pacman hooks
+  block:
+    - name: pacman hooks - create folder
+      file: path=/etc/pacman.d/hooks state=directory owner=root
+    - name: pacman hooks - copy hook(s)
+      copy: src={{ item }} dest='/etc/pacman.d/hooks/'
+      loop:
+        - paccache.hook
+        - linux-modules-post.hook
+        - linux-modules-pre.hook
+    - name: pacman hooks - supporting file(s)
+      copy: src='linux-modules-cleanup.service' dest='/etc/systemd/system/'
+    - name: pacman hooks - supporting service(s)
+      systemd: name=linux-modules-cleanup.service state=started enabled=true
+
+
+
+
