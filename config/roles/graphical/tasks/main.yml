@@ -16,6 +16,8 @@
       template: src='lightdm.conf' dest='/etc/lightdm/lightdm.conf'
     - name: lightdm - configure gtk-greeter 
       template: src='lightdm-gtk-greeter.conf' dest='/etc/lightdm/lightdm-gtk-greeter.conf'
+    - name: ligthdm - enable and start service
+      systemd: name=lightdm.service state=started enabled=yes
   when: (isgui|bool)
 
 - name: install userspace stuff

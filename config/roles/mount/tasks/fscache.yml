@@ -13,9 +13,13 @@
     update_cache: yes
   when: (isgui|bool)
 
+
+# Need to confirm kernel installed is same as running version
+# Or figure out why the pacman hooks to perserve kernel modules aren't working
 - name: Load cachefiles module
   command: modprobe cachefiles
   when: (isgui|bool)
+  ignore_errors: true
 
 - name: Enable and start cachefiles service
   service:
@@ -23,4 +27,5 @@
     state: started
     enabled: yes
   when: (isgui|bool)
+  ignore_errors: true
 

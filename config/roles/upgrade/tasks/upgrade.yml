@@ -16,6 +16,10 @@
     - { name: "usr", mode: "0755" }
   notify: daemon-reload
 
+
+- name: tmp - install pacman-contrib for paccache
+  pacman: name=pacman-contrib state=present
+
 - name: enable schedule-reboot and download-updates timer
   service:
     name: '{{ item }}' 

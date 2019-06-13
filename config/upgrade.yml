@@ -1,0 +1,15 @@
+- name: Upgrade/install packages on lab machines 
+  hosts: lab
+  strategy: free
+  gather_facts: True
+  vars:
+    doupgrade: true
+  pre_tasks:
+    - pacman: update_cache=true
+      register: pacman_updated
+    - name: check if paserve is installed
+      shell: pacman -Q pacserve
+      register: pac_pacserve
+      ignore_errors: true
+  roles:
+    - {role: upgrade, tags: ['upgrade']}
