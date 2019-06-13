@@ -31,17 +31,17 @@
   with_items:
     - {src: 'nsswitch.conf', dest: '/etc/nsswitch.conf'}
     - {src: 'system-auth', dest: '/etc/pam.d/system-auth'}
-    - {src: 'sssd.service', dest: '/etc/systemd/system/'}
     - {src: 'nscd.conf', dest: '/etc/nscd.conf'}
     - {src: 'passwd', dest: '/etc/pam.d/passwd'}
     - {src: 'nobeep.conf', dest: '/etc/modprobe.d/nobeep.conf'} #MOVE 
+    - {src: 'sssd.service', dest: '/etc/systemd/system/'}
     - {src: 'waitnetwork.conf', dest: '/etc/systemd/system/sssd.service.d/'}
 
 - name: configrure sssd, krb5
   template:
     src: '{{ item.src }}' 
     dest: '{{ item.dest }}' 
-    mode: 0600
+    mode: 0644
   with_items:
     - {src: 'ldap.conf.j2', dest: '/etc/openldap/ldap.conf' } 
     - {src: 'sssd.conf.j2', dest: '/etc/sssd/sssd.conf' } 
@@ -62,3 +62,12 @@
 - name: set timezone
   timezone:
     name: "{{ system.timezone }}"
+
+- name: start and enable sssd and timesyncd
+  service:
+    name: "{{ item }}"
+    state: started 
+    enabled: yes
+  loop: 
+    - sssd.service
+    - systemd-timesyncd
