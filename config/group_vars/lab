@@ -148,7 +148,6 @@ mounts:
     automount: true
 packages:
   remove:
-    - cinnamon
     - python-pyside
     - python-pyside-common
     - python-shiboken
@@ -166,7 +165,6 @@ packages:
     - libnm-gtk
     - liborigin2
     - libxfont
-    - libxfont
     - lightdm-kde-greeter
     - linux-mainline
     - linux-mainline-headers
@@ -175,7 +173,6 @@ packages:
     - luxrender
     - pcmciautils
     - phonon-qt4
-    - phonon-qt4-gstreamer
     - phonon-qt4-gstreamer
     - polkit-qt4
     - python2-cssutils
@@ -186,8 +183,8 @@ packages:
     - rar
     - srvadmin-hapi
     - visual-studio-code
-    - visual-studio-code
     - wireshark-gtk
+    - wpa_supplicant
   install:
     - accerciser
     - adobe-source-code-pro-fonts
@@ -604,6 +601,7 @@ packages:
     - mimeo
     - mines-playbooks
     - minicom
+    - mit-scheme
     - mlocate
     - mnemosyne
     - monit
@@ -946,7 +944,6 @@ packages:
     - wine_gecko
     - winetricks
     - wireshark-qt
-    - wpa_supplicant
     - x11-ssh-askpass
     - x264
     - xbindkeys
