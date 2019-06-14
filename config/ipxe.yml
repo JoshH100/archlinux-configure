@@ -6,14 +6,14 @@
   become: yes 
   vars:
     arch:
+      key: "/tmp/sb.key"
+      key_src: "/data/sb/DB.key"
+      crt_src: "/data/sb/DB.crt"
+      crt: "/tmp/sb.crt"
       mkosi:
         repo: "https://github.com/JoshH100/archlive-mkosi.git"
         dest: "/data/mkosi"
         output: "/data/arch/"
-        key: "/tmp/sb.key"
-        key_src: "/data/sb/DB.key"
-        crt_src: "/data/sb/DB.crt"
-        crt: "/tmp/sb.crt"
         iso:
           start1: 1048576
           root1: 269484032

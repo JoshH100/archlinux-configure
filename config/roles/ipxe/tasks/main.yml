@@ -19,11 +19,17 @@
     #    - "{{ ipxe.dest }}/efi"
     #- "{{ ipxe.dest }}/root"
 
-- name: symlink in ipxe binaries
+- name: sign and copy in ipxe binaries
   block:
-    - pacman: name=ipxe-netboot state=present
-    - file: path="{{ ipxe.dest }}" state=directory mode=0755
-    - file: src="/usr/share/ipxe-netboot/ipxe.efi" dest="{{ ipxe.dest }}/ipxe.efi" state=link
+    - name: ipxe - install ipxe-netboot
+      pacman: name=ipxe-netboot state=present
+    - name: ipxe - deploy signing key
+      copy: src=DB.key dest="{{ arch.key}}" 
+    - name: ipxe - deploy signing crt
+      copy: src=DB.crt dest="{{ arch.crt}}" 
+    - name: ipxe - sign ipxe.efi
+      command: "sbsign --key {{arch.key}} --cert {{arch.crt}} --output {{ ipxe.dest}}/ipxe.efi /usr/share/ipxe-netboot/ipxe.efi"
+    #- file: src="/usr/share/ipxe-netboot/ipxe.efi" dest="{{ ipxe.dest }}/ipxe.efi" state=link
     #- file: src="/usr/share/ipxe-netboot" dest="{{ ipxe.dest }}/ipxe" state=link
 
 

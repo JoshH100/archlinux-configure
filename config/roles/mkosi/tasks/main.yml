@@ -5,8 +5,8 @@
     - file: path="{{ output }}" state=directory
     - pacman: name="mkosi-git" state=latest update_cache=true
     - git: repo="{{ arch.mkosi.repo }}" dest="{{ arch.mkosi.dest }}"
-    - copy: src=DB.key dest="{{ arch.mkosi.key }}"
-    - copy: src=DB.crt dest="{{ arch.mkosi.crt }}"
+    - copy: src=DB.key dest="{{ arch.key }}"
+    - copy: src=DB.crt dest="{{ arch.crt }}"
     - template: src=build-mkosi.j2 dest=/tmp/build-mkosi mode=0755
 
 - name: pause to run mkosi
@@ -24,7 +24,7 @@
   block:
     - pacman: name=squashfs-tools state=present
     - command: "mksquashfs {{ arch.mkosi.output }} {{ output }}/airootfs.sfs"
-    - command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ output }}/vmlinuz-linux {{ arch.mkosi.output }}boot/vmlinuz-linux"
+    - command: "sbsign --key {{ arch.key }} --cert {{ arch.crt }} --output {{ output }}/vmlinuz-linux {{ arch.mkosi.output }}boot/vmlinuz-linux"
     - copy: src="{{ arch.mkosi.output}}boot/initramfs-linux.img" dest="{{ output }}/initramfs-linux.img" remote_src=true
 
 
