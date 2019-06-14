@@ -1,9 +1,6 @@
 # set vi:syntax=yaml
 doupgrade: true
 software_remove:
-  - jre7-openjdk
-  - jre7-openjdk-headless
-  - vim
 # label what kind of license servers these are
 license:
   servers:
@@ -148,24 +145,16 @@ mounts:
     automount: true
 packages:
   remove:
-    - cinnamon
-    - python-pyside
-    - python-pyside-common
-    - python-shiboken
-    - python2-pyside
-    - python2-shiboken
-    - shiboken
-    - perl-gtk2-ex-podviewer
-    - perl-gtk2-ex-simple-list
     - arm
     - attica
     - embree2
+    - jre7-openjdk
+    - jre7-openjdk-headless
     - kdebase-runtime
     - kdelibs
     - lib32-flashplugin
     - libnm-gtk
     - liborigin2
-    - libxfont
     - libxfont
     - lightdm-kde-greeter
     - linux-mainline
@@ -174,20 +163,28 @@ packages:
     - luxrays
     - luxrender
     - pcmciautils
+    - perl-gtk2-ex-podviewer
+    - perl-gtk2-ex-simple-list
     - phonon-qt4
     - phonon-qt4-gstreamer
-    - phonon-qt4-gstreamer
     - polkit-qt4
+    - python-pyside
+    - python-pyside-common
+    - python-shiboken
     - python2-cssutils
     - python2-gnuplot
     - python2-neovim
+    - python2-pyside
+    - python2-shiboken
     - qt-assistant-compat
     - qtiplot
     - rar
+    - shiboken
     - srvadmin-hapi
-    - visual-studio-code
+    - vim
     - visual-studio-code
     - wireshark-gtk
+    - wpa_supplicant
   install:
     - accerciser
     - adobe-source-code-pro-fonts
@@ -604,6 +601,7 @@ packages:
     - mimeo
     - mines-playbooks
     - minicom
+    - mit-scheme
     - mlocate
     - mnemosyne
     - monit
@@ -946,7 +944,6 @@ packages:
     - wine_gecko
     - winetricks
     - wireshark-qt
-    - wpa_supplicant
     - x11-ssh-askpass
     - x264
     - xbindkeys
