@@ -129,19 +129,19 @@ mounts:
     share: files.mines.edu:/export/fermat
     mount: /u 
     type: nfs
-    options: auto,x-systemd.automount,x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,vers=3
+    options: x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,vers=3
     automount: true
   gpfc:
     share: files.mines.edu:/export/gpfc
     mount: /gpfc 
     type: nfs
-    options: auto,x-systemd.automount,x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,vers=3
+    options: x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,vers=3
     automount: true
   scratch:
     share: files.mines.edu:/export/scratch
     mount: /scratch 
     type: nfs
-    options: auto,x-systemd.automount,x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,vers=3
+    options: x-systemd.device-timeout=10,rsize=32768,wsize=32768,nolock,ac,vers=3
     automount: true
 packages:
   remove:

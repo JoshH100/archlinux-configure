@@ -22,8 +22,11 @@
     name: systemd-networkd-wait-online.service
     enabled: true
 
-- name: Setup mounts using systemd
-  include_role: name=ypsman.systemd_mounts 
+#- name: Setup mounts using systemd
+#  include_role: name=ypsman.systemd_mounts 
+
+- import_tasks: systemd_mounts.yml
+  tags: [systemd_mounts]
 
 - name: enable fscache
   import_tasks: fscache.yml
