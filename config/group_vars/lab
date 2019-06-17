@@ -10,7 +10,7 @@ license:
     - entrust.mines.edu
 pacserve:
   # enable use of this flag
-  enabled: true
+  enabled: false 
   args: --multicast --peer http://labbuild-test1.mines.edu:15678
 cups:
   servername: cups.mines.edu

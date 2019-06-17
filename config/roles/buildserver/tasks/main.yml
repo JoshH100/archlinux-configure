@@ -90,7 +90,7 @@
 - name: Setup zsh aliases (ba,sa,fa)
   template:
     src: build_functions.j2
-    dest: "{{ build.functions.dest }}" 
+    dest: "{{ zsh.build.functions.dest }}" 
 
 # Begin Anisble AWX tasks
 
@@ -100,9 +100,9 @@
 - name: start docker
   systemd: name="docker.service" state=started enabled=true
 
-- name: clone AWX repository
-  block:
-    - git: repo="{{ awx.repo.src }}" dest="{{ awx.repo.dest }}" force=yes
-    - template: src=inventory.j2 dest="{{ awx.repo.dest}}/installer/inventory"
+#- name: clone AWX repository
+#  block:
+  #    - git: repo="{{ awx.repo.src }}" dest="{{ awx.repo.dest }}" force=yes
+  #  - template: src=inventory.j2 dest="{{ awx.repo.dest}}/installer/inventory"
       
 

@@ -1,3 +1,10 @@
+pacman:
+  options:
+    - UseSyslog
+    - Color
+    - TotalDownload
+    - CheckSpace
+    - UseDelta
 cctk: /opt/dell/dcc/cctk
 bios:
   newsetuppwd: !vault |

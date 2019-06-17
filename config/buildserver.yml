@@ -3,46 +3,6 @@
   strategy: free
   gather_facts: True
   become: yes
-  vars:
-    awx:
-      org: CCIT
-      description: "Colorado School of Mines: CCIT"
-      project:
-        name: playbooks
-        scm_credential: "awx host"
-        description: "Mines Lab and Server playbooks"
-        organization: CCIT
-        url:
-      settings:
-        - {opt: ANSIBLE_FACT_CACHE_TIMEOUT, value: 10}
-        - {opt: DEFAULT_PROJECT_UPDATE_TIMEOUT, value: 10}
-        - {opt: DEFAULT_INVENTORY_UPDATE_TIMEOUT, value: 10}
-        - {opt: DEFAULT_JOB_TIMEOUT, value: 300}
-        - {opt: AWX_ISOLATED_CONNECTION_TIMEOUT, value: 10}
-        - {opt: AWX_ISOLATED_LAUNCH_TIMEOUT, value: 300}  
-    atftp:
-      args: "--no-multicast --maxthread 20 --verbose=6 /usr/share/ipxe-netboot/"
-    rabbitmq:
-      user:
-        name: 'sensu'
-        password: 'sensu' 
-      port: 5670
-    zsh:
-      theme: clint
-      term: linux
-    contact_email: jhoffer@mines.edu
-    mines_repo_host: labbuild-test1:15678
-    type: server
-    sudoers:
-      - ccitlabadmins
-    module_list:
-      - nfs
-      - cachefiles
-
-        #  pre_tasks:
-        #    - pacman: update_cache=true
-        #      register: pacman_updated
-
   roles:
     - {role: buildserver, tags: ['buildserver']}
     - role: ypsman.systemd_mounts 

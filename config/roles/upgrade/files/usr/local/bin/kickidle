@@ -5,7 +5,7 @@ import datetime
 from systemd import login
 
 MINUID=900
-MAXIDLE=25
+MAXIDLE=12
 
 if __name__ == '__main__':
     sessions = {}
