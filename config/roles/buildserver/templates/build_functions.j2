@@ -1,4 +1,4 @@
-# Very helpful, maybe necessary shell functions
+# Very helpful, necessary shell functions
 ba()
 {
 	# Build AUR package
@@ -17,6 +17,16 @@ fa()
 	sudo journalctl -f -u $(systemd-escape --template=aur-sync@.service "$1")
 }
 
+qa ()
+{
+	        sudo systemctl stop $(systemd-escape --template=aur-sync@.service "$1")
+}
+
+bfa(){
+	ba "$1"
+	fa "$1"
+}
+
 addkey()
 {
 	sudo -u {{ build.user.name }} gpg --recv-keys "$1"
@@ -28,7 +38,12 @@ add-package()
 	sudo -u {{ build.user.name }} repo-add -s -k "{{ build.makepkg.gpgkey }}"  "{{ build.repo.dest }}/{{ build.repo.name}}.tar.xz" "$1"
 }
 
-# build manually
+remove-package()
+{
+	sudo -u {{ build.user.name }} repo-remove -s -k "{{ build.makepkg.gpgkey }}"  "{{ build.repo.dest }}/{{ build.repo.name}}.tar.xz" "$1"
+}
+
+# build manually (broken I think)
 local-build()
 {
 	#sudo -u {{ build.user.name }} aur build 

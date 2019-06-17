@@ -3,8 +3,8 @@
 
 - name: Setup AWX oragizations
   tower_organization:
-    name: {{ awx.org }}
-    description: {{ awx.description }} 
+    name: "{{ awx.org }}"
+    description: "{{ awx.description }}"
     state: present
     tower_config_file: /root/.tower_cli.cfg
 
@@ -45,10 +45,10 @@
 
 - name: Setup playbooks project
   tower_project:
-    name: {{ awx.project.name }} 
-    scm_credential: {{ awx.project.scm_credential }}
-    description: {{ awx.project.description }}
-    organization: {{ awx.project.CCIT }}
+    name: "{{ awx.project.name }}" 
+    scm_credential: "{{ awx.project.scm_credential }}"
+    description: "{{ awx.project.description }}"
+    organization: "{{ awx.project.CCIT }}"
     state: present
     scm_type: git
     scm_url: "{{ awx.project.url }}"

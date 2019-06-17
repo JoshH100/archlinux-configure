@@ -26,7 +26,6 @@
     - systemd: name={{ build.aur.dest[1:] | replace("/", "-") }}.mount state=started enabled=yes
     - template: src=repo.mount.j2 dest=/etc/systemd/system/{{ build.repo.dest[1:] | replace("/", "-") }}.mount
     - systemd: name={{ build.repo.dest[1:] | replace("/", "-") }}.mount  state=started enabled=yes
-    - copy: src=lug.conf dest=/etc/pacman.d/lug.conf
     - lineinfile: path=/etc/pacman.d/mirrors.conf insertafter=EOF line="Server = {{ item }}"
       loop: "{{ pacman.mirrors }}" 
     - template: src=pacman.conf.j2 dest=/etc/pacman.conf
