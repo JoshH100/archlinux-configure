@@ -4,18 +4,16 @@
     - lzop
   when: doupgrade|bool
 
-
 - name: copy upgrade scripts and services
   copy:
     src: "{{ item.name }}"
     dest: "/"
     mode: "{{ item.mode }}"
-  tags: safe
+  tags: safe,upgrade
   with_items:
     - { name: "etc", mode: "0644" }
     - { name: "usr", mode: "0755" }
   notify: daemon-reload
-
 
 - name: tmp - install pacman-contrib for paccache
   pacman: name=pacman-contrib state=present
