@@ -4,7 +4,7 @@
 - name: Copy authorized keys to account(s)
   authorized_key:
     user: "{{ item.user }}" 
-    state: present
+    state: "{{ item.state }}"
     key: "{{ item.key }}"
   loop: "{{ ssh1.ceys|flatten(levels=1) }}"
   #loop: "{{ q('list', ssh.root.keys) }}"
