@@ -20,26 +20,38 @@
 
 - name: Create systemd mounts and mount repo and aursync locations
   block:
-    - file: path=/etc/samba/creds state=directory mode="u+rwx,g-rwx,o-rwx"
-    - template: src=samba_creds.j2 dest={{ cifs.creds.dest }} mode="u+rwx,g-rwx,o-rwx"
-    - template: src=aursync.mount.j2 dest=/etc/systemd/system/{{ build.aur.dest[1:] | replace("/", "-") }}.mount
-    - systemd: name={{ build.aur.dest[1:] | replace("/", "-") }}.mount state=started enabled=yes
-    - template: src=repo.mount.j2 dest=/etc/systemd/system/{{ build.repo.dest[1:] | replace("/", "-") }}.mount
-    - systemd: name={{ build.repo.dest[1:] | replace("/", "-") }}.mount  state=started enabled=yes
-    - lineinfile: path=/etc/pacman.d/mirrors.conf insertafter=EOF line="Server = {{ item }}"
+    - name: buildserver mounts - 
+      file: path=/etc/samba/creds state=directory mode="u+rwx,g-rwx,o-rwx"
+    - name: buildserver mounts - samba creds (temporary for CIFS)
+      template: src=samba_creds.j2 dest={{ cifs.creds.dest }} mode="u+rwx,g-rwx,o-rwx"
+    - name: buildserver mounts - template aursync mount 
+      template: src=aursync.mount.j2 dest=/etc/systemd/system/{{ build.aur.dest[1:] | replace("/", "-") }}.mount
+    - name: buildserver mounts - enable aursync mount
+      systemd: name={{ build.aur.dest[1:] | replace("/", "-") }}.mount state=started enabled=yes
+    - name: buildserver mounts - template repo mount
+      template: src=repo.mount.j2 dest=/etc/systemd/system/{{ build.repo.dest[1:] | replace("/", "-") }}.mount
+    - name: buildserver mounts - enable repo mount
+      systemd: name={{ build.repo.dest[1:] | replace("/", "-") }}.mount  state=started enabled=yes
+    - name: buildserver mounts - pacman mirrors (MOVE)
+      lineinfile: path=/etc/pacman.d/mirrors.conf insertafter=EOF line="Server = {{ item }}"
       loop: "{{ pacman.mirrors }}" 
-    - template: src=pacman.conf.j2 dest=/etc/pacman.conf
+    - name: buildserver mounts - template pacman.conf (MOVE)
+      template: src=pacman.conf.j2 dest=/etc/pacman.conf
     
 - name: import gpg key into pacman and build user keyrings
   block:
-    - copy: src=signing.key dest=/home/{{ build.user.name }}/
-    - command: /usr/bin/pacman-key -a /home/{{ build.user.name }}/signing.key
-    - command: /usr/bin/pacman-key --lsign-key "{{ build.makepkg.gpgkey }}"
-    - command: /usr/bin/gpg --import /home/{{ build.user.name }}/signing.key
+    - name: gpg keys - copy signing key
+      copy: src=signing.key dest=/home/{{ build.user.name }}/
+    - name: gpg keys - import key 
+      command: /usr/bin/pacman-key -a /home/{{ build.user.name }}/signing.key
+    - name: gpg keys - sign local key
+      command: /usr/bin/pacman-key --lsign-key "{{ build.makepkg.gpgkey }}"
+    - name: gpg keys - import key into GPG (why?)
+      command: /usr/bin/gpg --import /home/{{ build.user.name }}/signing.key
       become_user: "{{ build.user.name }}"
 
 
-- name: copy files
+- name: template buildaur script
   template: src={{ item.src }} dest={{item.dest}} mode={{item.mode}}
   loop:
     - { src: buildaur.j2, dest: /usr/local/bin/buildaur, mode: 755 } 

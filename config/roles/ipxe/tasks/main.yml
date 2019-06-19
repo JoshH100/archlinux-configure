@@ -36,20 +36,27 @@
 # Currenly copies from the local host (remote_src=no)
 - name: copy in files from mkosi
   block:
-    - copy: src="{{ ipxe.fs }}/airootfs.sfs" dest="{{ ipxe.dest }}/fs/x86_64/airootfs.sfs" remote_src=yes
+    - name: mkosi - copy airootfs.sfs
+      copy: src="{{ ipxe.fs }}/airootfs.sfs" dest="{{ ipxe.dest }}/fs/x86_64/airootfs.sfs" remote_src=yes
     #- copy: src="{{ ipxe.fs/linux.signed }}" dest="{{ ipxe.dest }}/linux" remote_src= yes
-    - copy: src="{{ ipxe.fs }}/vmlinuz-linux" dest="{{ ipxe.dest }}/vmlinuz-linux" remote_src=yes
-    - copy: src="{{ ipxe.fs }}/initramfs-linux.img" dest="{{ ipxe.dest }}/initramfs-linux.img" remote_src=yes
+    - name: mkosi - copy vmlinuz-linux 
+      copy: src="{{ ipxe.fs }}/vmlinuz-linux" dest="{{ ipxe.dest }}/vmlinuz-linux" remote_src=yes
+    - name: mkosi - copy initramfs-linux
+      copy: src="{{ ipxe.fs }}/initramfs-linux.img" dest="{{ ipxe.dest }}/initramfs-linux.img" remote_src=yes
 
 
 # add check if kernel is signed and then copy with .signed extension and skip singing
 
 - name: fetch secure boot keys and certs # can sbsign write to same path?? 
   block:
-    - pacman: name=sbsigntools state=present
-    - copy: src=DB.key dest="{{ arch.mkosi.key }}"
-    - copy: src=DB.crt dest="{{ arch.mkosi.crt }}"
-    - command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ ipxe.dest }}/vmlinuz-linux {{ ipxe.dest }}/vmlinuz-linux"
+    - name: sign boot files - install sbsigntools
+      pacman: name=sbsigntools state=present
+    - name: sign boot files - copy key
+      copy: src=DB.key dest="{{ arch.mkosi.key }}"
+    - name: sign boot files - copy crt
+      copy: src=DB.crt dest="{{ arch.mkosi.crt }}"
+    - name: sign boot files - sign files with sbsign
+      command: "sbsign --key {{ arch.mkosi.key }} --cert {{ arch.mkosi.crt }} --output {{ ipxe.dest }}/vmlinuz-linux {{ ipxe.dest }}/vmlinuz-linux"
   when: false|bool
 
 #- name: clone repo, build image, create ipxe fs structure
