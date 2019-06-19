@@ -21,6 +21,7 @@ pacman:
     - ck182-34
     - ch275l-07
     - grla110-28
+    - gc297-30
   options:
     - UseSyslog
     - Color
