@@ -1,5 +1,7 @@
 - name: reload_atftpd
   block:
-    - systemd: name=atftpd.service state=reloaded
-    - systemd: name=atftpd.service state=restarted enabled=true
+    - name: enable atftpd
+      systemd: name=atftpd.service state=reloaded
+    - name: restart and anable atftpd
+      systemd: name=atftpd.service state=restarted enabled=true
 

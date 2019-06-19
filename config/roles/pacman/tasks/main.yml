@@ -6,8 +6,10 @@
 
 - name: deploy mirrors.conf and mirrorlist
   block:
-    - template: src=mirrors.conf.j2 dest=/etc/pacman.d/mirrors.conf
-    - copy: src=mirrorlist dest=/etc/pacman.d/mirrorlist
+    - name: pacman - template mirrors.conf
+      template: src=mirrors.conf.j2 dest=/etc/pacman.d/mirrors.conf
+    - name: pacman - copy mirrorlist
+      copy: src=mirrorlist dest=/etc/pacman.d/mirrorlist
 
 - include_tasks: gpg.yml
   loop: "{{ pacmankeys|flatten(levels=1) }}"
@@ -30,7 +32,3 @@
       copy: src='linux-modules-cleanup.service' dest='/etc/systemd/system/'
     - name: pacman hooks - supporting service(s)
       systemd: name=linux-modules-cleanup.service state=started enabled=true
-
-
-
-

@@ -4,17 +4,22 @@
 
 - name: Populate pacman keyring
   block:
-    - shell: "pacman-key --init"
-    - shell: "pacman-key --populate"
+    - name: pacman - init keyring
+      shell: "pacman-key --init"
+    - name: pacman - populate keyring
+      shell: "pacman-key --populate"
   ignore_errors: true 
   when: pacmankeyring.stat.exists != true
 
 # Attempt to use signing name as destination name
 - name: Fetch, import, and trust sumblime key
   block:
-    - get_url: url="{{ item.src }}" dest="/etc/pacman.d/{{ item.name }}"
-    - shell: "pacman-key --add /etc/pacman.d/{{ item.name }}"
-    - shell: "pacman-key --lsign-key {{ item.name }}"
+    - name: sublime key - download
+      get_url: url="{{ item.src }}" dest="/etc/pacman.d/{{ item.name }}"
+    - name: sublime key - add key
+      shell: "pacman-key --add /etc/pacman.d/{{ item.name }}"
+    - name: sublime key - sign key
+      shell: "pacman-key --lsign-key {{ item.name }}"
   ignore_errors: true 
   when: item.src is defined
 

@@ -5,6 +5,8 @@
 
 - name: Import and trust key
   block:
-    - shell: "pacman-key --recv {{ item.name }}"
-    - shell: "pacman-key --lsign {{ item.name }}"
+    - name: pacman - fetch key
+      shell: "pacman-key --recv {{ item.name }}"
+    - name: pacman - sign key
+      shell: "pacman-key --lsign {{ item.name }}"
   when: keystate.rc != 0
