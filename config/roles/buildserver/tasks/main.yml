@@ -89,7 +89,7 @@
 
 - name: Setup zsh aliases (ba,sa,fa)
   template:
-    src: build_functions.j2
+    src: buildfunctions.j2
     dest: "{{ zsh.build.functions.dest }}" 
 
 # Begin Anisble AWX tasks
