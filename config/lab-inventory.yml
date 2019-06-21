@@ -1,0 +1,33 @@
+---
+all:
+        children:
+                servers:
+                        hosts:
+                                plabnagios
+                                plabpuppet
+                                plabmon
+                labbuild:
+                        hosts:
+                                labbuild-test[1:3]
+                lab:
+                        children:
+                                bb136:
+                                        hosts:
+                                                bb136-[01:24]
+                                ch215l:
+                                        hosts:
+                                                ch215li
+                                                ch215l-[01:16]
+                                ch275l:
+                                        hosts:
+                                                ch275l-[01:08]
+                                ck182:
+                                        hosts:
+                                                ck182-[18:34]
+                                gc297:
+                                        hosts:
+                                                gc297-30
+                                labservers:
+                                        hosts:
+                                                isengard
+
