@@ -1,6 +1,13 @@
 ---
-- import_tasks: password.yml
-  tags: [biospassword]
+#- import_tasks: password.yml
+#  tags: [biospassword]
+
+- name: bios - install dell command configure
+  pacman: name=dell-command-configure state=present
+
+
+- name: bios - enable dell instsvcdrv service
+  systemd: name=instsvcdrv state=started enabled=true
 
 - name: Set SATA mode to AHCI (Disable Intel RAID)
   command: /opt/dell/dcc/cctk --valsetuppwd=intelctlm --embsataraid=ahci

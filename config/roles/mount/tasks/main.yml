@@ -31,3 +31,8 @@
 - name: enable fscache
   import_tasks: fscache.yml
   tags: [fscache]
+
+
+- name: configure TRIM
+  import_tasks: trim.yml
+  tags: [trim]

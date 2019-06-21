@@ -1,0 +1,18 @@
+- name: configure fstrim
+  block:
+    - name: fstrim - ensure util-linux is present
+      pacman: name=util-linux state=present
+    - name: fstrim - create systemd service override directory
+      file: path=/etc/systemd/system/fstrim.service.d state=directory
+    - name: fstrim - override fstrim.service to support all mount points
+      blockinfile:
+        path: /etc/systemd/system/fstrim.service.d/override.conf
+        create: true
+        block: |
+          [Service]
+          ExecStart=
+          ExecStart=/sbin/fstrim -av
+    - name: fstrim - reload systemd
+      command: systemctl daemon-reload
+    - name: fstrim - enable and start fstrim timer
+      systemd: name=fstrim.timer state=started enabled=true
