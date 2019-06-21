@@ -1,7 +1,7 @@
 ---
 - name: mlocate
   block:
-    - name: mlocate- install
+    - name: mlocate - install
       pacman: name=mlocate state=present
-    - name: mlocate- enable timer
+    - name: mlocate - enable timer
       systemd: name=updatedb.timer state=started enabled=true
