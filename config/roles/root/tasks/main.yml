@@ -1,3 +1,6 @@
+- name: root - include ssh role
+  include_role: name=ssh
+
 - name: change default shell to zsh
   block:
     - pacman: name=zsh state=present
