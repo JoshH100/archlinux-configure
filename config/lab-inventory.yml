@@ -3,6 +3,7 @@ all:
         children:
                 servers:
                         hosts:
+                                mordor
                                 plabnagios
                                 plabpuppet
                                 plabmon
@@ -27,6 +28,10 @@ all:
                                 gc297:
                                         hosts:
                                                 gc297-30
+                                grla110:
+                                        hosts:
+                                                grla110i
+                                                grla110-[01:28]
                                 labservers:
                                         hosts:
                                                 isengard
